@@ -7,12 +7,14 @@ Prediction error estimation for regression models via resampling techniques. Pot
 \usage{
 peperr(response, x, 
 	indices = NULL, 
-	fit.fun, complexity = NULL, args.fit = NULL, args.complexity = NULL, 
-	parallel = FALSE, cpus = 2, noclusterstart = FALSE, noclusterstop=FALSE,
+	fit.fun, complexity = NULL, args.fit = NULL, args.complexity = NULL,
+	parallel = FALSE, cpus = 2,
+	noclusterstart = FALSE, noclusterstop=FALSE,
 	aggregation.fun=NULL, args.aggregation = NULL, 
-	load.list = extract.fun(list(fit.fun, complexity, aggregation.fun)), 
-	load.vars = NULL, load.all = FALSE, trace = FALSE, debug = FALSE,
-	peperr.lib.loc=NULL)
+	load.list = extract.fun(list(fit.fun, complexity, aggregation.fun)),
+	load.vars = NULL, load.all = FALSE, 
+	trace = FALSE, debug = FALSE,
+	peperr.lib.loc=NULL, seed=NULL)
 }
 \arguments{
 \item{response}{Either a survival object (with \code{Surv(time, status)}, where time is an \code{n}-vector of censored survival times and status an \code{n}-vector containing event status, coded with 0 and 1) or a matrix with columns \code{time} containing survival times and \code{status} containing integers, where 0 indicates censoring, 1 the interesting event and larger numbers other competing risks. In case of binary response, vector with entries 0 and 1.}
@@ -40,6 +42,7 @@ See Details.
 \item{trace}{logical. If TRUE, output about the current execution step is printed (if running parallel: printed on nodes, that means not visible in master R process, see Details).}
 \item{debug}{if TRUE, information concerning export of variables is given.}
 \item{peperr.lib.loc}{location of package \code{peperr} if not in standard library search path (\code{.libPaths()}), to be specified for loading \pkg{peperr} onto the cluster nodes.}
+\item{seed}{either integer, or vector of length number of samples +2, to allow reproducibility of results. In the second case, the first entry is used for the main R process, the next number of samples ones for each sample run (in parallel execution mode on slave R processes) and the last one for computation on full sample (as well on slave R process in parallel execution mode). Passing integer x is equivalent to passing vector \code{x+0:(number of samples+1)}. Per default, no seed is set.}
 }
 \details{
 Validation of new model fitting approaches requires the proper use of resampling techniques for prediction error estimation. Especially in high-dimensional data situations the computational demand might be huge. \code{peperr} accelerates computation through automatically parallelisation of the resampling procedure, if a compute cluster is available. A noticeable speed-up is reached even when using a dual-core processor.
@@ -72,7 +75,7 @@ Concerning parallelisation, there are three possibilities to run \code{peperr}:
 2. Use LAM/MPI-Cluster (argument \code{parallel} has to be set to TRUE and number of cpus can be chosen by argument \code{nodes}) 
 3. If no cluster is used, R works sequentially. Keep \code{parallel=FALSE}. No parallelisation takes place and therefore no speed up can be obtained. 
 
-Note that the run time is not speed up anymore if the number of nodes is chosen higher than the number of passed training/test samples as the parallelisation takes place in the resampling procedure. 
+Note that the run time cannot speed up anymore if the number of nodes is chosen higher than the number of passed training/test samples plus one, as parallelisation takes place in the resampling procedure and one additional run is used for computation on the full sample.
 
 If not running in sequential mode, a specified number of R processes called nodes is spawned for parallel execution of the resampling procedure (see above). This requires to provide all variables, functions and libraries necessary for computation on each of these R processes, so explicitly all variables, functions and libraries required by the, potentially user-defined, functions \code{fit.fun}, \code{complexity} and \code{aggregation.fun}. The simplest possibility is to load the whole content of the global environment on each node. This is done by setting argument \code{load.all=TRUE}. This is not the default, as a huge amount of data is potentially loaded to each node unnecessarily. Function \code{extract.fun} is provided to extract the functions and libraries needed, automatically called at each call of function \code{peperr}. Note that all required libraries have to be located in the standard library search path (obtained by \code{.libPaths()})
 }
@@ -147,7 +150,6 @@ lines(peperr.object1$attribute,
 # As Example 1, but
 # with complexity selected through a cross-validation procedure
 # and extra argument 'penalty' passed to fit function and complexity function
-set.seed(123)
 peperr.object2 <- peperr(response=Surv(time, status), x=x, 
    fit.fun=fit.CoxBoost, args.fit=list(penalty=100),
    complexity=complexity.mincv.CoxBoost, args.complexity=list(penalty=100),
@@ -161,13 +163,16 @@ plot(peperr.object2)
 # Example 3:
 # As Example 2, but
 # with extra argument 'times', specifying the evaluation times passed to aggregation.fun
+# and seed, for reproducibility of results
+# Note: set.seed() is required additional to argument 'seed', 
+# as function 'resample.indices' is used in peperr call.
 set.seed(123)
 peperr.object3 <- peperr(response=Surv(time, status), x=x, 
    fit.fun=fit.CoxBoost, args.fit=list(penalty=100),
    complexity=complexity.mincv.CoxBoost, args.complexity=list(penalty=100),
    indices=resample.indices(n=length(time), method="sub632", sample.n=10),
    args.aggregation=list(times=seq(0, quantile(time, probs=0.9), length.out=100)),
-   trace=TRUE)
+   trace=TRUE, seed=321)
 peperr.object3
 
 # Diagnostic plots

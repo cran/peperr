@@ -1,11 +1,15 @@
 \name{complexity.ipec.CoxBoost}
 \alias{complexity.ipec.CoxBoost}
+\alias{complexity.ripec.CoxBoost}
 \title{Interface function for complexity selection for CoxBoost via integrated prediction error curve and the bootstrap}
 \description{
 Determines the number of boosting steps for a survival model fitted by CoxBoost via integrated prediction error curve (IPEC) estimates, conforming to the calling convention required by argument \code{complexity} in \code{peperr} call. 
 }
 \usage{
 complexity.ipec.CoxBoost(response, x, boot.n.c = 10, boost.steps = 100, 
+   eval.times = NULL, smooth = FALSE, full.data, ...)
+
+complexity.ripec.CoxBoost(response, x, boot.n.c = 10, boost.steps = 100, 
    eval.times = NULL, smooth = FALSE, full.data, ...)
 }
 \arguments{
@@ -22,7 +26,7 @@ complexity.ipec.CoxBoost(response, x, boot.n.c = 10, boost.steps = 100,
 Scalar value giving the number of boosting steps.
 }
 \details{
-Plotting the .632+ estimator for each time point given in \code{eval.times} results in a prediction error curve. A summary measure can be obtained by integrating over time, where Kaplan-Meier estimates are used as weights. The number of boosting steps of the interval (0, \code{boost.steps}), for which the minimal IPEC is obtained, is returned.
+Plotting the .632+ estimator for each time point given in \code{eval.times} results in a prediction error curve. A summary measure can be obtained by integrating over time. \code{complexity.ripec.CoxBoost} computes a Riemann integral, while \code{complexity.ipec.CoxBoost} uses a Lebesgue-like integral taking Kaplan-Meier estimates as weights. The number of boosting steps of the interval (0, \code{boost.steps}), for which the minimal IPEC is obtained, is returned.
 }
 \seealso{ \code{peperr}, \code{\link[CoxBoost:CoxBoost-package]{CoxBoost}} }
 \keyword{models} \keyword{regression} \keyword{survival}

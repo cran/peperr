@@ -1,7 +1,0 @@
-1.0-1
-
--   predictProb functions require arguments 'response' and 'x' instead of 'data' 
-
-1.0
-
-* initial public release

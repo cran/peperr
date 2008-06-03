@@ -31,7 +31,6 @@ peperr.object1 <- peperr(response=Surv(time, status), x=x,
    indices=resample.indices(n=length(time), method="sub632", sample.n=10))
 plot(peperr.object1)
 
-set.seed(1234)
 peperr.object2 <- peperr(response=Surv(time, status), x=x, 
    fit.fun=fit.CoxBoost, args.fit=list(penalty=100),
    complexity=complexity.mincv.CoxBoost, args.complexity=list(penalty=100),
@@ -39,7 +38,6 @@ peperr.object2 <- peperr(response=Surv(time, status), x=x,
    trace=TRUE)
 plot(peperr.object2)
 
-set.seed(1234)
 peperr.object3 <- peperr(response=Surv(time, status), x=x, 
    fit.fun=fit.CoxBoost, args.fit=list(penalty=100),
    complexity=complexity.mincv.CoxBoost, args.complexity=list(penalty=100),

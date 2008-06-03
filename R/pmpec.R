@@ -42,7 +42,7 @@ pmpec <- function(object, response=NULL, x=NULL, times, model.args=NULL, type=c(
     }
 
     mod.time <- time
-    if (any(status > 1)) {
+    if (any(status != 0 | status != 1)) {
         mod.time[status > 1] <- max(time,times) + 1
     }
 

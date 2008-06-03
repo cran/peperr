@@ -6,10 +6,17 @@ function(response, x,
    aggregation.fun=NULL, args.aggregation=NULL,
    load.list=extract.fun(list(fit.fun, complexity, aggregation.fun)), 
    load.vars=NULL, load.all=FALSE,
-   trace=FALSE, debug=FALSE, peperr.lib.loc=NULL)
+   trace=FALSE, debug=FALSE, peperr.lib.loc=NULL, seed=NULL)
 {
    require(survival)
    binary <- FALSE
+   if (!is.null(seed)){
+      if (length(seed)==1 || length(seed)==(length(indices$sample.index)+2)){
+        set.seed(seed[1])
+      } else {
+      stop("Provide argument 'seed' that is integer or vector of length number of samples plus 2")
+      }
+   }
    if(is.null(aggregation.fun)){
       if(is.Surv(response)){
          aggregation.fun <- aggregation.pmpec
@@ -102,11 +109,20 @@ function(response, x,
    if (environmentName(environment(aggregation.fun))!="peperr"){sfExport("aggregation.fun")}
    if (environmentName(environment(complexity))!="peperr"){sfExport("complexity")}
    sfExport("response", "x", "sample.index.full", "sample.n", "not.in.sample.full", 
-      "args.fit", "args.complexity", "binary", "km.weight")
+      "args.fit", "args.complexity", "args.aggregation", "binary", "seed")
+   try(sfExport("km.weight"), silent=!debug)
 
    if(trace){message("Evaluation on slaves starts now")}
 
    sample.fun <- function(actual.sample){
+      if (!is.null(seed)){
+         if (length(seed)==1){
+           set.seed(seed+actual.sample)
+         } else {
+           set.seed(seed[actual.sample+1])
+         } 
+      }
+
       if (trace && actual.sample<sample.n){
          cat("Sample run", actual.sample, "of", (sample.n-1), "\n")
       }
@@ -218,6 +234,8 @@ function(response, x,
           }
       dimnames(actual.error) <- NULL
       
+      if (actual.sample<sample.n) sample.fit.list <- NULL
+
       if (is.Surv(response)){
          dimnames(lipec.oob) <- NULL
          dimnames(pll.oob) <- NULL
@@ -237,6 +255,19 @@ function(response, x,
 }
 
    sample.error.list <- sfClusterApplyLB(as.list(1:sample.n), sample.fun)
+   stop <- FALSE
+   for(i in 1:length(sample.error.list)){
+      if (class(sample.error.list[[i]])=="try-error"){ 
+         if (i != sample.n){
+            cat("Error in run", i, ":", sample.error.list[[i]])
+         } else {
+            cat("Error in full sample run:", sample.error.list[[i]])
+         }
+         stop <- TRUE
+      }
+   }
+   if (stop) stop("Error(s) occurred in (bootstrap) sample run(s), see above")
+
    sample.error.full <- lapply(sample.error.list, function(arg) arg$actual.error)
    sample.complexity.full <- unlist(lapply(sample.error.list, function(arg) arg$sample.complexity))
    sample.fit.full <- lapply(sample.error.list, function(arg) arg$sample.fit)

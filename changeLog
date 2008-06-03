@@ -1,6 +1,14 @@
+1.0-3
+
+- new argument 'seed' in function 'peperr', to allow reproducibility in parallel execution
+
+1.0-2
+
+- bug fixed which occurred in competing risks setting
+
 1.0-1
 
--   predictProb functions require arguments 'response' and 'x' instead of 'data' 
+- predictProb functions require arguments 'response' and 'x' instead of 'data' 
 
 1.0
 

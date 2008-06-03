@@ -11,9 +11,9 @@ plot.peperr <- function(x, y, ...){
    if (is.list(x$selected.complexity)){
    if (is.vector(x$attribute)){
             if (!is.null(x$null.model)){
-               plot(x$attribute, x$null.model, type="l", col="blue",
+               plot(x$attribute, x$null.model, type="n", col="blue",
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves")
+                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.1))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], 
@@ -23,14 +23,14 @@ plot.peperr <- function(x, y, ...){
                lines(x$attribute, x$null.model, type="l", col="blue", lwd=2, lty=4)
                lines(x$attribute, perr(x), type="l", lty=1, lwd=2)
                lines(x$attribute, x$full.apparent, type="l", col="red", lty=2, lwd=2)
-               legend(x="bottomright", 
-                  col=c("blue", "black", "red", "light grey"), lty=c(2, 1, 2, 1),
+               legend(x="topright", 
+                  col=c("blue", "black", "red", "light grey"), lty=c(4, 1, 2, 1), lwd=c(2,2,2,1),
                   legend=c("Null model", "632+ estimate", "Full apparent", "Bootstrap samples"))
             } else {
               readline()
-              plot(x$attribute, perr(x), type="l", col="red", lwd=2, lty=1,
+              plot(x$attribute, perr(x), type="n", col="red", lwd=2, lty=1,
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.05))
+                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.1))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], 
@@ -39,8 +39,8 @@ plot.peperr <- function(x, y, ...){
                }
                lines(x$attribute, perr(x), type="l", lty=1, lwd=2)
                lines(x$attribute, x$full.apparent, type="l", col="red", lty=2, lwd=2)
-               legend(x="bottomright", 
-                  col=c("black", "red", "light grey"), lty=c(1, 2, 1),
+               legend(x="topleft", 
+                  col=c("black", "red", "light grey"), lty=c(1, 2, 1), lwd=c(2, 2, 1),
                   legend=c("632+ estimate", "Full apparent", "Bootstrap samples"))
             }
          }
@@ -55,9 +55,9 @@ plot.peperr <- function(x, y, ...){
             main="Selected complexity values in bootstrap samples", 
             xlab="Complexity", sub="(Red line: complexity selected in full data set)")
          lines(c(x$selected.complexity, x$selected.complexity), c(-1, 10000), col="red")
-      readline()
       }
       if (!is.null(x$sample.lipec)){
+         readline()
          lipec <- unlist(lapply(x$sample.lipec, function(arg) arg[[1]]))
          hist(lipec, 
             main="Lebesgue integrated prediction error curve (LIPEC) in bootstrap samples", 
@@ -83,9 +83,9 @@ plot.peperr <- function(x, y, ...){
          if (is.vector(x$attribute)){
             if (!is.null(x$null.model)){
                readline()
-               plot(x$attribute, x$null.model, type="l", col="blue",
+               plot(x$attribute, x$null.model, type="n", col="blue",
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.05))
+                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.1))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], 
@@ -95,14 +95,14 @@ plot.peperr <- function(x, y, ...){
                lines(x$attribute, x$null.model, type="l", col="blue", lwd=2, lty=4)
                lines(x$attribute, perr(x), type="l", lty=1, lwd=2)
                lines(x$attribute, x$full.apparent, type="l", col="red", lty=2, lwd=2)
-               legend(x="bottom", 
-                  col=c("blue", "black", "red", "light grey"), lty=c(2, 1, 2, 1),
+               legend(x="topright", 
+                  col=c("blue", "black", "red", "light grey"), lty=c(4, 1, 2, 1), lwd= c(2, 2, 2, 1),
                   legend=c("Null model", "632+ estimate", "Full apparent", "Bootstrap samples"))
             } else {
               readline()
-              plot(x$attribute, perr(x), type="l", col="red", lwd=2, lty=1,
+              plot(x$attribute, perr(x), type="n", col="red", lwd=2, lty=1,
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.05))
+                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.1))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], 
@@ -111,13 +111,13 @@ plot.peperr <- function(x, y, ...){
                }
                lines(x$attribute, perr(x), type="l", lty=1, lwd=2)
                lines(x$attribute, x$full.apparent, type="l", col="red", lty=2, lwd=2)
-               legend(x="bottom", 
-                  col=c("black", "red", "light grey"), lty=c(1, 2, 1),
+               legend(x="topright", 
+                  col=c("black", "red", "light grey"), lty=c(1, 2, 1), lwd=c(2,2,1), 
                   legend=c("632+ estimate", "Full apparent", "Bootstrap samples"))
             }
          }
       } 
-        } else {
+   } else {
          if (length(x$selected.complexity)>1){
             if (!is.null(x$sample.lipec)){
                readline()
@@ -130,7 +130,6 @@ plot.peperr <- function(x, y, ...){
                boxplot(lipec~group, data=lipec.data,
                   main="Lebesgue integrated prediction error curve (LIPEC) in bootstrap samples", 
                   xlab="Complexity")
-               readline()
                if (!is.null(x$sample.lipec[[1]])){
                   pll <- c()
                   for (i in 1:length(x$sample.pll[[1]])){
@@ -138,6 +137,7 @@ plot.peperr <- function(x, y, ...){
                   }
                   group <- rep(x$sample.complexity, length(x$sample.pll))
                   pll.data <- data.frame(group=group, pll=as.vector((-2)*pll))
+                  readline()
                   boxplot(pll~group, data=pll.data,
                      main="(-2)*Predictive partial log-likelihood (PLL) in bootstrap samples", 
                      xlab="Complexity")
@@ -158,12 +158,13 @@ plot.peperr <- function(x, y, ...){
                points(x$sample.complexity, x$full.apparent, col="red")
             }
          } else {
-            readline()
             if (!is.null(x$sample.lipec)){
+         readline()
          lipec <- unlist(lapply(x$sample.lipec, function(arg) arg[[1]]))
          hist(lipec, 
             main="Lebesgue integrated prediction error curve (LIPEC) in bootstrap samples", 
             xlab="LIPEC")
+         }
          if (!is.null(x$sample.pll[[1]])){
             readline()
             pll <- unlist(lapply(x$sample.pll, function(arg) arg[[1]]))
@@ -174,9 +175,9 @@ plot.peperr <- function(x, y, ...){
          if (is.vector(x$attribute)){
             if (!is.null(x$null.model)){
                readline()
-               plot(x$attribute, x$null.model, type="l", col="blue",
+               plot(x$attribute, x$null.model, type="n", col="blue",
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.05))
+                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.1))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], type="l", col="light grey", lty=1)
@@ -185,14 +186,14 @@ plot.peperr <- function(x, y, ...){
                lines(x$attribute, x$null.model, type="l", col="blue", lwd=2, lty=4)
                lines(x$attribute, perr(x), type="l", lty=1, lwd=2)
                lines(x$attribute, x$full.apparent, type="l", col="red", lty=2, lwd=2)
-               legend(x="bottom",
-                  col=c("blue", "black", "red", "light grey"), lty=c(2, 1, 2, 1),
+               legend(x="topright",
+                  col=c("blue", "black", "red", "light grey"), lty=c(4, 1, 2, 1),
                   legend=c("Null model", ".632+ estimate", "Full apparent", "Bootstrap samples"))
                } else {
                   readline()
-                  plot(x$attribute, perr(x), type="l", col="blue",
+                  plot(x$attribute, perr(x), type="n", col="blue",
                      xlab="Evaluation time points", ylab= "Prediction error",
-                     main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.05))
+                     main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.1))
                   if (length(x$sample.error)>1){
                      for (i in 1:(length(x$sample.error))){
                         lines(x$attribute, x$sample.error[[i]], 
@@ -201,7 +202,7 @@ plot.peperr <- function(x, y, ...){
                   }
                   lines(x$attribute, perr(x), type="l", lty=1, lwd=2)
                   lines(x$attribute, x$full.apparent, type="l", col="red", lty=2, lwd=2)
-                  legend(x="bottom",
+                  legend(x="topright",
                      col=c( "black", "red", "light grey"), lty=c(1, 2, 1),
                      legend=c( ".632+ estimate", "Full apparent", "Bootstrap samples"))
                }
@@ -209,5 +210,4 @@ plot.peperr <- function(x, y, ...){
          }
       } 
    } 
-}
 }

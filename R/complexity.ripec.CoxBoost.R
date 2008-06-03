@@ -1,4 +1,4 @@
-`complexity.ipec.CoxBoost` <-
+`complexity.ripec.CoxBoost` <-
 function(response, x, boot.n.c=10, boost.steps=100, 
    eval.times=NULL, smooth=FALSE, full.data, ...){
    require(CoxBoost)
@@ -34,10 +34,6 @@ function(response, x, boot.n.c=10, boost.steps=100,
    }
 
    w.eval.times.c <- unique(w.eval.times.c)
-
-   km.fit <- survfit(Surv(time, status)~1, data=actual.data.c)
-   km.pred <- summary(object=km.fit, times=w.eval.times.c)$surv
-   km.weight <- -1*diff(km.pred)
 
    fullcoxboost <- CoxBoost(time=time,status=status,x=x, stepno=boost.steps, ...)
 
@@ -108,9 +104,9 @@ function(response, x, boot.n.c=10, boost.steps=100,
       w.boot632p.error.smooth <- w.boot632p.error.wo
    }
 
-   Lint.boot632p.error <- apply(t(w.boot632p.error.smooth[,1:(length(km.weight))])*km.weight,2,sum)
+   int.boot632p.error <- apply(t(w.boot632p.error.smooth[,1:(ncol(w.boot632p.error.smooth)-1)])*diff(w.eval.times.c),2,sum)
 
-   min.ipec <- which.min(Lint.boot632p.error)
+   min.ipec <- which.min(int.boot632p.error)
    min.ipec
 }
 
