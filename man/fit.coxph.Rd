@@ -11,7 +11,7 @@ fit.coxph(response, x, cplx, ...)
   \item{response}{a survival object (with \code{Surv(time, status)}).}
   \item{x}{\code{n*p} matrix of covariates.}
   \item{cplx}{not used.}
-  \item{\dots}{additional arguments passed to \code{CoxBoost} call.}
+  \item{\dots}{additional arguments passed to \code{coxph} call.}
 }
 \value{
 CoxBoost object

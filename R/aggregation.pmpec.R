@@ -31,25 +31,25 @@ function(full.data, response, x, model, cplx=NULL, times=NULL, type=c("apparent"
    if (type=="apparent"){
       error <- pmpec(object=model, response=response, x=x, times=eval.times,
          model.args=list(complexity=cplx$stepno), type="PErr", 
-         external.time=full.data$time, external.status=full.data$status)
+         external.time=full.data$time, external.status=full.data$status, ...)
       }
 
    if (type=="noinf"){
       error <- pmpec(object=model, response=response, x=x, times=eval.times,
          model.args=list(complexity=cplx$stepno), type="NoInf", 
-         external.time=full.data$time, external.status=full.data$status)
+         external.time=full.data$time, external.status=full.data$status, ...)
       }
 } else {
 if (type=="apparent"){
       error <- pmpec(object=model, response=response, x=x, times=eval.times,
          model.args=list(complexity=cplx), type="PErr", 
-         external.time=full.data$time, external.status=full.data$status)
+         external.time=full.data$time, external.status=full.data$status, ...)
       }
 
    if (type=="noinf"){
       error <- pmpec(object=model, response=response, x=x, times=eval.times,
          model.args=list(complexity=cplx), type="NoInf", 
-         external.time=full.data$time, external.status=full.data$status)
+         external.time=full.data$time, external.status=full.data$status, ...)
       }
 
 }

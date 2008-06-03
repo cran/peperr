@@ -11,7 +11,7 @@ print.peperr <- function(x, ...){
          }
       } else {
           cat("Passed complexity: ", "\n")
-          print(unlist(x$complexity))
+          print(x$complexity)
        }
    } else {
       if ((all.equal(x$complexity,x$selected.complexity)!=TRUE)[1]){

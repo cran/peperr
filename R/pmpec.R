@@ -3,11 +3,11 @@ pmpec <- function(object, response=NULL, x=NULL, times, model.args=NULL, type=c(
     require(survival)
     type <- match.arg(type)
 
-    if(is.null(response)&&is.null(x)){
+    if(is.null(response)&&is.null(x)) {
        if(!is.null(data)){
           time <- data$time
           status <- data$status
-          x <- data[,!(names(newdata) %in% c("time", "status"))]
+          x <- as.matrix(data[,!(names(data) %in% c("time", "status"))])
        } else {
           stop("Please pass either arguments 'response' and 'x' or 'data'")
        }
@@ -48,7 +48,7 @@ pmpec <- function(object, response=NULL, x=NULL, times, model.args=NULL, type=c(
 
     status.mat <- matrix(times,length(time),length(times),byrow=TRUE) < mod.time
 
-    probmat <- do.call("predictProb", c(list(object=object, response=Surv(time, status), x=x ,times=times),model.args))
+    probmat <- do.call("predictProb", c(list(object=object, response=response, x=x ,times=times), model.args))
 
     weightmat <- t(t(status.mat) / eval.cens.prob) + (1 - status.mat) * matrix(status,length(status),length(times)) * matrix(1/invcensprob,length(status),length(times))
 

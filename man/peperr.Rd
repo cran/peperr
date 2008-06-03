@@ -84,14 +84,14 @@ Object of class \code{peperr}
 \item{complexity}{passed complexity. If argument \code{complexity} not specified, 0.}
 \item{selected.complexity}{selected complexity for the full data set, if \code{complexity} was passed as function. Else equal to value \code{complexity}.}
 \item{response}{passed response. If argument \code{complexity} not specified, 0.}
-\item{full.model.fit}{fitted model of the full data set by passed \code{fit.fun}.}
+\item{full.model.fit}{List, one entry per complexity value. Fitted model of the full data set by passed \code{fit.fun}.}
 \item{full.apparent}{full apparent error of the full data set. Matrix: One row per complexity value. In case of survival response, columns correspond to evaluation timepoints, which are returned in value \code{attribute}.}
 \item{noinf.error}{No information error of the full data set, i. e. evaluation in permuted data. Matrix: One row per complexity value. Columns correspond to evaluation timepoints, which are returned in \code{attribute}.}
 \item{attribute}{if response is survival: Evaluation time points. Passed in \code{args.aggregation} or automatically determined by aggregation function. Otherwise, if available, extra attribute returned by aggregation function, else \code{NULL}, see Details.}
 \item{sample.error}{list. Each entry contains matrix of prediction error for one resampling test sample. One row per complexity value.}
 \item{sample.complexity}{vector of complexity values. Equals value \code{complexity}, if complexity value was passed explicitly, otherwise by function \code{complexity} selected complexity value for each resampling sample. If argument \code{complexity} not specified, 0.}
-\item{sample.lipec}{only, if response is survival. Lebesgue integrated prediction error curve for each sample. Matrix, one row per complexity value.}
-\item{sample.pll}{only, if response is survival and PLL.class function available. Predictive partial log likelihood for each sample. Matrix, one row per complexity value.}
+\item{sample.lipec}{only, if response is survival. Lebesgue integrated prediction error curve for each sample. List with one entry per sample, each a matrix with one row per complexity value.}
+\item{sample.pll}{only, if response is survival and PLL.class function available. Predictive partial log likelihood for each sample. List with one entry per sample, each a matrix with one row per complexity value.}
 \item{null.model.fit}{only, if response is survival or binary. Fit of null model, i.e. fit without information of covariates. In case of survival response Kaplan-Meier, else logistic regression model.}
 \item{null.model}{only, if response is survival or binary. Vector or scalar: Prediction error of the null model, in case of survival response at each evaluation time point.}
 \item{sample.null.model}{list. Prediction error of the null model for one resampling test sample. Matrix, one row per complexity value.}

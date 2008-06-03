@@ -7,6 +7,7 @@ aggregation.brier <- function(full.data=NULL, response, x, model, cplx=NULL,  ty
    } else {
       probs <- predict(model, data=data, type="response", ...)
    }
+
    type <- match.arg(type)
    if (type=="apparent"){
       brier.score <- sum((probs-response)^2)/length(response)

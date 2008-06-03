@@ -1,4 +1,9 @@
 plot.peperr <- function(x, y, ...){
+   if (is.null(x$complexity)) {
+      x.complexity <- 0
+   } else {
+      x.complexity <- x$complexity
+   }
    if (is.list(x$selected.complexity) &&
        length(x$sample.complexity)/length(x$selected.complexity)/length(x$indices$sample.index)>1){ 
       return("No plots available")
@@ -42,7 +47,7 @@ plot.peperr <- function(x, y, ...){
    } else {
    require(locfit)
    message("Press enter for next graphic")
-   if ((all.equal(x$complexity,x$selected.complexity)!=TRUE)[1]){
+   if ((all.equal(x.complexity,x$selected.complexity)!=TRUE)[1]){
       if(sum(x$sample.complexity==0)<length(x$sample.complexity)){
          hist(x$sample.complexity, breaks=1:max(x$sample.complexity, x$selected.complexity), 
             xlim=c(min(c(x$selected.complexity, x$sample.complexity)), 
@@ -171,7 +176,7 @@ plot.peperr <- function(x, y, ...){
                readline()
                plot(x$attribute, x$null.model, type="l", col="blue",
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves")
+                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.05))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], type="l", col="light grey", lty=1)
@@ -187,7 +192,7 @@ plot.peperr <- function(x, y, ...){
                   readline()
                   plot(x$attribute, perr(x), type="l", col="blue",
                      xlab="Evaluation time points", ylab= "Prediction error",
-                     main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.05))
+                     main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.05))
                   if (length(x$sample.error)>1){
                      for (i in 1:(length(x$sample.error))){
                         lines(x$attribute, x$sample.error[[i]], 

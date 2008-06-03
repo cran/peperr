@@ -8,7 +8,7 @@ Extracts the predictive partial log-likelihood from a CoxBoost model fit.
 PLL.CoxBoost(object, newdata, newtime, newstatus, complexity, ...)
 }
 \arguments{
-  \item{object}{fitted model of class \code{class}.}
+  \item{object}{fitted model of class \code{CoxBoost}.}
   \item{newdata}{\code{n_new*p} matrix of covariates.}
   \item{newtime}{\code{n_new}-vector of censored survival times.}
   \item{newstatus}{\code{n_new}-vector of survival status, coded with 0 and .1}
@@ -16,7 +16,7 @@ PLL.CoxBoost(object, newdata, newtime, newstatus, complexity, ...)
   \item{\dots}{additional arguments, not used.}
 }
 \details{
-\code{peperr} requires function \code{PLL.CoxBoost} for CoxBoost model fit.
+Used by function \code{peperr}, if function \code{fit.CoxBoost} is used for model fit.
 }
 \value{
 Vector of length \code{n_new}

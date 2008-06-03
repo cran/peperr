@@ -55,7 +55,7 @@ function(response, x, boot.n.c=10, boost.steps=100,
       pe.w.noinf.error <- pmpec(object=fullcoxboost,
          data=actual.data.c, times=w.eval.times.c,
          model.args=list(complexity=m),
-         external.time=full.data$time, external.status=full.data$status)
+         external.time=full.data$time, external.status=full.data$status, type="NoInf")
       w.noinf.error[m,] <- pe.w.noinf.error
    }
 

@@ -55,6 +55,7 @@ function(response, x,
       }
    }
 
+   null.model <- NULL
    actual.data <- as.data.frame(x)
    if (is.Surv(response)){
       #xnames <- names(actual.data) 
@@ -78,6 +79,11 @@ function(response, x,
    attr(null.model, "addattr") <- attributes(null.model)$addattr
    fullsample.attr <- attr(null.model, "addattr")
 
+   if (is.Surv(response)){
+   km.pred <- summary(object=km.fit, times=fullsample.attr)$surv 
+   km.weight <- -1*diff(km.pred)
+   }
+
    fullsample.index <- resample.indices(n=nrow(x), method="no")
    sample.index <- indices$sample.index
    not.in.sample <- indices$not.in.sample
@@ -86,54 +92,6 @@ function(response, x,
    sample.n <- length(sample.index)+1
    sample.index.full[[sample.n]] <- fullsample.index$sample.index[[1]]
    not.in.sample.full[[sample.n]] <- fullsample.index$not.in.sample[[1]]
-
-   if (is.function(complexity)){
-      cplx <- do.call("complexity", c(list(response=response, x=x, full.data=actual.data), 
-         args.complexity))
-   } else {
-      if (is.vector(complexity)){
-         cplx <- complexity
-      } else cplx <- 0
-   }
-
-#    full.apparent <- c()
-    noinf.error <- c()
-# 
-   if (is.list(cplx)){
-      for (i in 1:length(cplx[[1]])){
-          list.cplx <- lapply(cplx, function(arg) arg[i])
-          fullmodel <- do.call("fit.fun", c(list(response=response, x=x, 
-            cplx=list.cplx), args.fit))
-     
-#          full.apparent.i <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
-#             response=response, x=x, model=fullmodel, cplx=list.cplx), args.aggregation))	
-#          full.apparent <- rbind(full.apparent, full.apparent.i)
-         noinf.error.i <- do.call("aggregation.fun", c(list(full.data=actual.data, type="noinf", 
-               response=response , x=x, model=fullmodel, cplx=list.cplx), args.aggregation))	
-         noinf.error <- rbind(noinf.error, noinf.error.i)	
-      }
-   } else {
-      if (is.vector(cplx)){
-         for (i in 1:length(cplx)){
-            fullmodel <- do.call("fit.fun", c(list(response=response, x=x, 
-              cplx=cplx[i]), args.fit))
-    
-#             full.apparent.i <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
-#                response=response, x=x, model=fullmodel, cplx=cplx[i]), args.aggregation))	
-#             full.apparent <- rbind(full.apparent, full.apparent.i)
-            noinf.error.i <- do.call("aggregation.fun", c(list(full.data=actual.data, type="noinf", 
-                  response=response , x=x, model=fullmodel, cplx=cplx[i]), args.aggregation))	
-            noinf.error <- rbind(noinf.error, noinf.error.i)	
-         }
-      }
-   }
-
-   dimnames(noinf.error) <- NULL
-#    dimnames(full.apparent) <- NULL
-
-#    attr(full.apparent, "addattr") <- attributes(full.apparent.i)$addattr
-#    fullsample.attr <- attr(full.apparent, "addattr")
-#    attr(noinf.error, "addattr") <- attributes(full.apparent.i)$addattr
 
    pP. <- ls(pattern="predictProb.", name=".GlobalEnv")
    try(eval(call("sfExport", pP., debug=debug)), silent=!debug)
@@ -144,7 +102,7 @@ function(response, x,
    if (environmentName(environment(aggregation.fun))!="peperr"){sfExport("aggregation.fun")}
    if (environmentName(environment(complexity))!="peperr"){sfExport("complexity")}
    sfExport("response", "x", "sample.index.full", "sample.n", "not.in.sample.full", 
-      "args.fit", "args.complexity", "binary")
+      "args.fit", "args.complexity", "binary", "km.weight")
 
    if(trace){message("Evaluation on slaves starts now")}
 
@@ -170,12 +128,14 @@ function(response, x,
          pll.oob <- c()
       }
       actual.error <- c()
+      sample.fit.list <- list()
       if (is.list(sample.complexity)){
          for (i in 1:length(sample.complexity[[1]])){
             list.sample.complexity <- lapply(sample.complexity, function(arg) arg[i])
             sample.fit <- do.call("fit.fun", c(list(response=response[unique(sample.index.full[[actual.sample]]),],
                x=x[unique(sample.index.full[[actual.sample]]),], 
                cplx=list.sample.complexity), args.fit))
+            sample.fit.list[[i]] <- sample.fit
          #class(sample.fit) <- c(class(sample.fit), "peperrinterinternal")
 
             actual.error.i <-  do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent",
@@ -187,11 +147,11 @@ function(response, x,
  
             if (is.Surv(response)){
                km.fit <- survival::survfit(Surv(time, status)~1,
-                  data=actual.data[not.in.sample.full[[actual.sample]],])
+                  data=actual.data[unique(sample.index.full[[actual.sample]]),])
                km.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
-                  response=response, x=x, model=km.fit), args.aggregation))
-               km.pred <- summary(object=km.fit, times=fullsample.attr)$surv 
-               km.weight <- -1*diff(km.pred)
+                  response=response[unique(sample.index.full[[actual.sample]]),],
+                  x=x[unique(sample.index.full[[actual.sample]]),], model=km.fit, 
+                  fullsample.attr=fullsample.attr), args.aggregation))
                lipec.oob.i <- sum(actual.error.i[1:(length(km.weight))]*km.weight, na.rm=TRUE)
                lipec.oob <- rbind(lipec.oob, lipec.oob.i)
                if (exists(paste("PLL.", class(sample.fit), sep=""))){
@@ -202,10 +162,12 @@ function(response, x,
                }
             } else {
                if(binary){
-                  logreg.fit <- glm(formula=response~1, data=actual.data[not.in.sample.full[[actual.sample]],],
+                  logreg.fit <- glm(formula=response~1, data=actual.data[sample.index.full[[actual.sample]],],
                      family=binomial())
                   logreg.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent",  
-                     response=response, x=x, model=logreg.fit), args.aggregation))
+                     response=response[unique(sample.index.full[[actual.sample]]),],
+                     x=x[unique(sample.index.full[[actual.sample]]),], model=logreg.fit), 
+                     args.aggregation))
                   }
                }
             }
@@ -216,6 +178,7 @@ function(response, x,
                       c(list(response=response[unique(sample.index.full[[actual.sample]]),],
                       x=x[unique(sample.index.full[[actual.sample]]),], 
                      cplx=sample.complexity[i]), args.fit))
+                     sample.fit.list[[i]] <- sample.fit
          #class(sample.fit) <- c(class(sample.fit), "peperrinterinternal")
 
                    actual.error.i <-  do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent",
@@ -227,11 +190,11 @@ function(response, x,
 
                    if (is.Surv(response)){
                      km.fit <- survival::survfit(Surv(time, status)~1,
-                        data=actual.data[not.in.sample.full[[actual.sample]],])
+                        data=actual.data[sample.index.full[[actual.sample]],])
                      km.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
-                        response=response, x=x, model=km.fit), args.aggregation))
-                     km.pred <- summary(object=km.fit, times=fullsample.attr)$surv 
-                     km.weight <- -1*diff(km.pred)
+                        response=response[unique(sample.index.full[[actual.sample]]),],
+                        x=x[unique(sample.index.full[[actual.sample]]),], model=km.fit,
+                        fullsample.attr=fullsample.attr), args.aggregation))
                      lipec.oob.i <- sum(actual.error.i[1:(length(km.weight))]*km.weight, na.rm=TRUE)
                      lipec.oob <- rbind(lipec.oob, lipec.oob.i)
                      if (exists(paste("PLL.", class(sample.fit), sep=""))){
@@ -242,10 +205,12 @@ function(response, x,
                      }
                   } else {
                      if (binary){
-                     logreg.fit <- glm(formula=response~1, data=actual.data[not.in.sample.full[[actual.sample]],],
+                     logreg.fit <- glm(formula=response~1, data=actual.data[sample.index.full[[actual.sample]],],
                         family=binomial())
                      logreg.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent",  
-                        response=response, x=x, model=logreg.fit), args.aggregation))
+                        response=response[unique(sample.index.full[[actual.sample]]),],
+                        x=x[unique(sample.index.full[[actual.sample]]),], 
+                        model=logreg.fit), args.aggregation))
                      }
                      }
                   }
@@ -257,15 +222,15 @@ function(response, x,
          dimnames(lipec.oob) <- NULL
          dimnames(pll.oob) <- NULL
          out <- list(actual.error=actual.error, sample.complexity=sample.complexity, 
-            sample.fit=sample.fit,
+            sample.fit=sample.fit.list,
             lipec.oob=lipec.oob, pll.oob=pll.oob, km.apparent=km.apparent)
       } else {
          if(binary){
             out <- list(actual.error=actual.error, sample.complexity=sample.complexity,
-                      sample.fit=sample.fit, logreg.apparent=logreg.apparent)
+                      sample.fit=sample.fit.list, logreg.apparent=logreg.apparent)
          } else {
             out <- list(actual.error=actual.error, sample.complexity=sample.complexity,
-               sample.fit=sample.fit)
+               sample.fit=sample.fit.list)
          }
       }
    out
@@ -287,6 +252,45 @@ function(response, x,
    }
    }
 
+   if (is.function(complexity)){
+      if (is.list(sample.error.list[[1]]$sample.complexity)){
+         cplx <- sample.error.list[[sample.n]]$sample.complexity
+      } else {
+         cplx <- sample.complexity.full[[sample.n]]
+      }
+   } else {
+      if (is.vector(complexity)){
+         cplx <- complexity
+      } else cplx <- 0
+   }
+
+   noinf.error <- c()
+
+   if (is.list(cplx)){
+      for (i in 1:length(cplx[[1]])){
+           list.cplx <- lapply(cplx, function(arg) arg[i])
+#           fullmodel <- do.call("fit.fun", c(list(response=response, x=x, 
+#             cplx=list.cplx), args.fit))
+#
+         noinf.error.i <- do.call("aggregation.fun", c(list(full.data=actual.data, type="noinf", 
+               response=response , x=x, model=sample.fit.full[[sample.n]][[i]], 
+               cplx=list.cplx, fullsample.attr=fullsample.attr), args.aggregation))	
+         noinf.error <- rbind(noinf.error, noinf.error.i)	
+      }
+   } else {
+      if (is.vector(cplx)){
+         for (i in 1:length(cplx)){
+
+            noinf.error.i <- do.call("aggregation.fun", c(list(full.data=actual.data, type="noinf", 
+                  response=response , x=x, model=sample.fit.full[[sample.n]][[i]], 
+                  cplx=cplx[i], fullsample.attr=fullsample.attr), args.aggregation))	
+            noinf.error <- rbind(noinf.error, noinf.error.i)	
+         }
+      }
+   }
+   if (is.null(fullsample.attr)) fullsample.attr <- attr(noinf.error.i, "addattr")
+   dimnames(noinf.error) <- NULL
+
    sfStop(nostop=noclusterstop)
 
    if (is.vector(sample.complexity.full)){
@@ -299,8 +303,7 @@ function(response, x,
    if (!is.function(complexity) && !is.list(complexity)){
    sample.complexity <- unique(sample.complexity)
    }
-
-
+  
    if (is.Surv(response)){
    output <- list(indices=list(sample.index=sample.index, not.in.sample=not.in.sample),
       selected.complexity=cplx, complexity=complexity, 
