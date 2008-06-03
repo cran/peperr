@@ -1,5 +1,5 @@
 useDynLib(peperr,noinf)
-import(snowfall)
+import(snowfall, survival)
 export(peperr, perr, extract.fun, resample.indices, aggregation.pmpec, complexity.ipec.CoxBoost, complexity.mincv.CoxBoost, fit.CoxBoost, fit.coxph, 
 PLL, PLL.CoxBoost, predictProb, predictProb.CoxBoost, predictProb.survfit, predictProb.coxph, pmpec, fit.LASSO, aggregation.misclass, aggregation.brier, complexity.LASSO)
 S3method(print,peperr)

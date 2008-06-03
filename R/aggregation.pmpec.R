@@ -3,12 +3,9 @@ function(full.data, response, x, model, cplx=NULL, times=NULL, type=c("apparent"
    fullsample.attr=NULL, ...){ 
    require(survival)   
 
-   data <- as.data.frame(x)
-   xnames <- names(data) 
+   xnames <- names(x) 
    time <- response[,"time"]
    status <- response[,"status"]
-   data$time <- time
-   data$status <- status
    
    uncens <- which(status == 1)
    time.uncens <- time[uncens]
@@ -32,25 +29,25 @@ function(full.data, response, x, model, cplx=NULL, times=NULL, type=c("apparent"
    eval.times <- c(0, unique(eval.times[eval.times>0]))
    if(is.list(cplx)){
    if (type=="apparent"){
-      error <- pmpec(object=model, data=data, times=eval.times,
+      error <- pmpec(object=model, response=response, x=x, times=eval.times,
          model.args=list(complexity=cplx$stepno), type="PErr", 
          external.time=full.data$time, external.status=full.data$status)
       }
 
    if (type=="noinf"){
-      error <- pmpec(object=model, data=data, times=eval.times,
+      error <- pmpec(object=model, response=response, x=x, times=eval.times,
          model.args=list(complexity=cplx$stepno), type="NoInf", 
          external.time=full.data$time, external.status=full.data$status)
       }
 } else {
 if (type=="apparent"){
-      error <- pmpec(object=model, data=data, times=eval.times,
+      error <- pmpec(object=model, response=response, x=x, times=eval.times,
          model.args=list(complexity=cplx), type="PErr", 
          external.time=full.data$time, external.status=full.data$status)
       }
 
    if (type=="noinf"){
-      error <- pmpec(object=model, data=data, times=eval.times,
+      error <- pmpec(object=model, response=response, x=x, times=eval.times,
          model.args=list(complexity=cplx), type="NoInf", 
          external.time=full.data$time, external.status=full.data$status)
       }

@@ -3,17 +3,19 @@
 \title{Calculate prediction error curves}
 \description{Calculation of prediction error curve from a survival response and predicted probabilities of survival.}
 \usage{
-pmpec(object, data, times, model.args=NULL, type=c("PErr","NoInf"), 
-	external.time=NULL, external.status=NULL)
+pmpec(object, response=NULL, x=NULL, times, model.args=NULL, type=c("PErr","NoInf"), 
+	external.time=NULL, external.status=NULL, data=NULL)
 }
 \arguments{
 \item{object}{fitted model of a class for which the interface function \code{predictProb.class} is available.}
-\item{data}{data frame containing a \code{n*p} matrix of covariates, an \code{n}-vector of observed survival times (called \code{time}) and an \code{n}-vector of status values (called \code{status}). Status is an event indicator indicator, i.e. contain 0 for censored observations and 1 for observations with the event of interest. Values not equal to 0 or 1 indicate competing events.}
+\item{response}{Either a survival object (with \code{Surv(time, status)}, where time is an \code{n}-vector of censored survival times and status an \code{n}-vector containing event status, coded with 0 and 1) or a matrix with columns \code{time} containing survival times and \code{status} containing integers, where 0 indicates censoring, 1 the interesting event and larger numbers other competing risks.}
+\item{x}{\code{n*p} matrix of covariates.}
 \item{times}{vector of time points at which the prediction error is to be estimated.}
 \item{model.args}{named list of additional arguments, e.g. complexity value, which are to be passed to \code{predictProb} function.}
 \item{type}{type of output: Estimated prediction error (default) or no information error (prediction error obtained by permuting the data).}
 \item{external.time}{optional vector of time points, used for censoring distribution.}
 \item{external.status}{optional vector of status values, used for censoring distribution.}
+\item{data}{Data frame containing \code{n}-vector of observed times ('time'), \code{n}-vector of event status ('status') and \code{n*p} matrix of covariates (remaining entries). Alternatively to \code{response} and \code{x}, for compatibility to \pkg{pec}.}
 }
 \value{
 Vector of prediction error estimates at each time point given in \code{time}.

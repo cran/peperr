@@ -1,4 +1,4 @@
-predictProb <- function (object, ...)
+predictProb <- function (object, response, x, ...)
 {
-    UseMethod("predictProb", object)
+    UseMethod("predictProb")
 }

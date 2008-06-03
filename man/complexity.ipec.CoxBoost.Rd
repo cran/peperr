@@ -1,6 +1,6 @@
 \name{complexity.ipec.CoxBoost}
 \alias{complexity.ipec.CoxBoost}
-\title{Interface function for complexity selection for CoxBoost via integrated prediction error curve}
+\title{Interface function for complexity selection for CoxBoost via integrated prediction error curve and the bootstrap}
 \description{
 Determines the number of boosting steps for a survival model fitted by CoxBoost via integrated prediction error curve (IPEC) estimates, conforming to the calling convention required by argument \code{complexity} in \code{peperr} call. 
 }

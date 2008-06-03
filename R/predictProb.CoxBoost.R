@@ -1,4 +1,4 @@
-predictProb.CoxBoost <- function(object, newdata, times, train.data=NULL, complexity, ...){
-  predict(object, type="risk", newdata=as.matrix(newdata[,!(names(newdata) %in% c("time","status")),drop=FALSE]),
+predictProb.CoxBoost <- function(object, response, x, times, complexity, ...){
+ predict(object, type="risk", newdata=x,
       times=times, at.step=complexity)
 }

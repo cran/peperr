@@ -1,6 +1,9 @@
-predictProb.coxph <- function (object, newdata, times, train.data, ...)
+predictProb.coxph <- function (object, response, x, times, ...)
 {
     require(survival)
+    newdata <- as.data.frame(x)
+    newdata$time <- response[, "time"]
+    newdata$status <- response[, "status"]
     survival.survfit.coxph <- getFromNamespace("survfit.coxph",
         ns = "survival")
     survival.summary.survfit <- getFromNamespace("summary.survfit",

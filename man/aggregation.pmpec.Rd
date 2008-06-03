@@ -10,7 +10,7 @@ aggregation.pmpec(full.data, response, x, model, cplx=NULL, times = NULL,
 }
 \arguments{
 \item{full.data}{data frame with full data set.}
-\item{response}{a survival object (with \code{Surv(time, status)}).}
+\item{response}{Either a survival object (with \code{Surv(time, status)}, where time is an \code{n}-vector of censored survival times and status an \code{n}-vector containing event status, coded with 0 and 1) or a matrix with columns \code{time} containing survival times and \code{status} containing integers, where 0 indicates censoring, 1 the interesting event and larger numbers other competing risks.}
 \item{x}{\code{n*p} matrix of covariates.}
 \item{model}{survival model as returned by \code{fit.fun} as used in call to \code{peperr}.}
 \item{cplx}{numeric, number of boosting steps or list, containing number of boosting steps in argument \code{stepno}.}

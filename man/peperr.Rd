@@ -15,7 +15,7 @@ peperr(response, x,
 	peperr.lib.loc=NULL)
 }
 \arguments{
-\item{response}{Either a survival object (with \code{Surv(time, status)}, where time is an \code{n}-vector of censored survival times and status an \code{n}-vector containing survival status, coded with 0 and 1, or with values not equal to 0 and 1 for competing events) or, in case of categorical response, vector with integer entries.}
+\item{response}{Either a survival object (with \code{Surv(time, status)}, where time is an \code{n}-vector of censored survival times and status an \code{n}-vector containing event status, coded with 0 and 1) or a matrix with columns \code{time} containing survival times and \code{status} containing integers, where 0 indicates censoring, 1 the interesting event and larger numbers other competing risks. In case of binary response, vector with entries 0 and 1.}
 \item{x}{\code{n*p} matrix of covariates.}
 \item{indices}{named list, with two elements (both expected to be lists) \code{sample.index}, containing the vector of indices of observations used to fit the model, and list \code{not.in.sample}, containing the vector of indices of observations used for assessment. One list entry per split.
 Function \code{resample.indices} provides the most common resampling methods. If argument \code{indices} is not specified (default), the indices are determined as follows: If number of observations in the passed data matrix is smaller than number of covariates, 500 bootstrap samples without replacement are generated ("subsampling"), else 500 bootstrap samples with replacement. 
@@ -42,7 +42,7 @@ See Details.
 \item{peperr.lib.loc}{location of package \code{peperr} if not in standard library search path (\code{.libPaths()}), to be specified for loading \pkg{peperr} onto the cluster nodes.}
 }
 \details{
-Validation of new model fitting approaches require the proper use of resampling techniques for prediction error estimation. Especially in high-dimensional data situations the computational demand might be huge. \code{peperr} accelerates computation through automatically parallelisation of the resampling procedure, if a compute cluster is available. A noticeable speed-up is reached even when using a dual-core processor.
+Validation of new model fitting approaches requires the proper use of resampling techniques for prediction error estimation. Especially in high-dimensional data situations the computational demand might be huge. \code{peperr} accelerates computation through automatically parallelisation of the resampling procedure, if a compute cluster is available. A noticeable speed-up is reached even when using a dual-core processor.
 
 Resampling based prediction error estimation requires for each split in training and test data the following steps: a) selection of model complexity (if desired), using the training data set, b) fitting the model with the selected (or a given) complexity on the training set and c) measurement of prediction error on the corresponding test set.
 
@@ -147,7 +147,7 @@ lines(peperr.object1$attribute,
 # As Example 1, but
 # with complexity selected through a cross-validation procedure
 # and extra argument 'penalty' passed to fit function and complexity function
-set.seed(1234)
+set.seed(123)
 peperr.object2 <- peperr(response=Surv(time, status), x=x, 
    fit.fun=fit.CoxBoost, args.fit=list(penalty=100),
    complexity=complexity.mincv.CoxBoost, args.complexity=list(penalty=100),
@@ -161,7 +161,7 @@ plot(peperr.object2)
 # Example 3:
 # As Example 2, but
 # with extra argument 'times', specifying the evaluation times passed to aggregation.fun
-set.seed(1234)
+set.seed(123)
 peperr.object3 <- peperr(response=Surv(time, status), x=x, 
    fit.fun=fit.CoxBoost, args.fit=list(penalty=100),
    complexity=complexity.mincv.CoxBoost, args.complexity=list(penalty=100),

@@ -25,7 +25,7 @@ plot.peperr <- function(x, y, ...){
               readline()
               plot(x$attribute, perr(x), type="l", col="red", lwd=2, lty=1,
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves", ylim=c(0, max(perr(x))+0.05))
+                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.05))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], 
@@ -80,7 +80,7 @@ plot.peperr <- function(x, y, ...){
                readline()
                plot(x$attribute, x$null.model, type="l", col="blue",
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves")
+                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.05))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], 
@@ -97,7 +97,7 @@ plot.peperr <- function(x, y, ...){
               readline()
               plot(x$attribute, perr(x), type="l", col="red", lwd=2, lty=1,
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves", ylim=c(0, max(perr(x))+0.05))
+                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent)+0.05))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], 
@@ -187,7 +187,7 @@ plot.peperr <- function(x, y, ...){
                   readline()
                   plot(x$attribute, perr(x), type="l", col="blue",
                      xlab="Evaluation time points", ylab= "Prediction error",
-                     main="Prediction error curves", ylim=c(0, max(perr(x))+0.05))
+                     main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.05))
                   if (length(x$sample.error)>1){
                      for (i in 1:(length(x$sample.error))){
                         lines(x$attribute, x$sample.error[[i]], 

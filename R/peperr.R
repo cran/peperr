@@ -15,10 +15,9 @@ function(response, x,
          aggregation.fun <- aggregation.pmpec
       } else {
          if (is.vector(response)&& length(unique(response))<3){
-            binary <- TRUE 
             aggregation.fun <- aggregation.brier
          } else {
-            stop("Please specify argument 'aggregation.fun'")  
+            stop("Please specify argument 'aggregation.fun' according to 'response'")  
          }
       }
    }
@@ -68,6 +67,7 @@ function(response, x,
          response=response, x=x, model=km.fit), args.aggregation))
    } else {
       if (is.vector(response)&& length(unique(response))<3){
+         binary <- TRUE
          actual.data$response <- response
          logreg.fit <- glm(formula=response~1, data=actual.data, family=binomial())
          null.model <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
