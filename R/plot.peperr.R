@@ -20,11 +20,11 @@ plot.peperr <- function(x, y, ...){
                      type="l", col="light grey", lty=1, lwd=0.01)
                   }
                }
-               lines(x$attribute, x$null.model, type="l", col="blue", lwd=2, lty=4)
+               lines(x$attribute, x$null.model, type="l", col="blue", lwd=2, lty=3)
                lines(x$attribute, perr(x), type="l", lty=1, lwd=2)
                lines(x$attribute, x$full.apparent, type="l", col="red", lty=2, lwd=2)
                legend(x="topright", 
-                  col=c("blue", "black", "red", "light grey"), lty=c(4, 1, 2, 1), lwd=c(2,2,2,1),
+                  col=c("blue", "black", "red", "light grey"), lty=c(3, 1, 2, 1), lwd=c(2,2,2,1),
                   legend=c("Null model", "632+ estimate", "Full apparent", "Bootstrap samples"))
             } else {
               readline()
@@ -92,11 +92,11 @@ plot.peperr <- function(x, y, ...){
                      type="l", col="light grey", lty=1, lwd=0.01)
                   }
                }
-               lines(x$attribute, x$null.model, type="l", col="blue", lwd=2, lty=4)
+               lines(x$attribute, x$null.model, type="l", col="blue", lwd=2, lty=3)
                lines(x$attribute, perr(x), type="l", lty=1, lwd=2)
                lines(x$attribute, x$full.apparent, type="l", col="red", lty=2, lwd=2)
                legend(x="topright", 
-                  col=c("blue", "black", "red", "light grey"), lty=c(4, 1, 2, 1), lwd= c(2, 2, 2, 1),
+                  col=c("blue", "black", "red", "light grey"), lty=c(3, 1, 2, 1), lwd= c(2, 2, 2, 1),
                   legend=c("Null model", "632+ estimate", "Full apparent", "Bootstrap samples"))
             } else {
               readline()
@@ -183,11 +183,11 @@ plot.peperr <- function(x, y, ...){
                      lines(x$attribute, x$sample.error[[i]], type="l", col="light grey", lty=1)
                   }
                }
-               lines(x$attribute, x$null.model, type="l", col="blue", lwd=2, lty=4)
+               lines(x$attribute, x$null.model, type="l", col="blue", lwd=2, lty=3)
                lines(x$attribute, perr(x), type="l", lty=1, lwd=2)
                lines(x$attribute, x$full.apparent, type="l", col="red", lty=2, lwd=2)
                legend(x="topright",
-                  col=c("blue", "black", "red", "light grey"), lty=c(4, 1, 2, 1),
+                  col=c("blue", "black", "red", "light grey"), lty=c(3, 1, 2, 1),
                   legend=c("Null model", ".632+ estimate", "Full apparent", "Bootstrap samples"))
                } else {
                   readline()

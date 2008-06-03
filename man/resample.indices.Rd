@@ -9,8 +9,8 @@ resample.indices(n, sample.n = 100, method = c("no", "cv" ,"boot", "sub632"))
 }
 \arguments{
 \item{n}{number of observations of the full data set.}
-\item{sample.n}{the number of bootstrap samples in case of \code{method="boot"} and the number of cross-validation subsets in case of method="cv", e.g. 10 for 10-fold cross-validation. Not considered if \code{method="no"}, where number of samples is one (the full data set) by definition.}
-\item{method}{by default, the training set indices are the same as the test set indices, i.e. the model is assessed in the same data as fitted (\code{"no"}). \code{"cv"}: Cross-validation, \code{"boot"}: Bootstrap (with replacement), \code{"sub632"}: Boostrap without replacement, also called subsampling. In the latter case, the number of observations in each sample equals \code{round(0.632 * n)}, see Details.}
+\item{sample.n}{the number of bootstrap samples in case of \code{method=boot} and the number of cross-validation subsets in case of \code{method=cv}, e.g. 10 for 10-fold cross-validation. Not considered if \code{method=no}, where number of samples is one (the full data set) by definition.}
+\item{method}{by default, the training set indices are the same as the test set indices, i.e. the model is assessed in the same data as fitted (\code{no}). \code{cv}: Cross-validation, \code{boot}: Bootstrap (with replacement), \code{sub632}: Boostrap without replacement, also called subsampling. In the latter case, the number of observations in each sample equals \code{round(0.632 * n)}, see Details.}
 }
 
 \value{

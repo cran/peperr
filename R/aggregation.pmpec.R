@@ -16,8 +16,8 @@ function(full.data, response, x, model, cplx=NULL, times=NULL, type=c("apparent"
       if(length(unique(time.uncens))<100){
          eval.times <- c(0,sort(time.uncens))
       } else {
-         quantile <- quantile(time.uncens, probs=0.95)
-         eval.times <-  sort(time.uncens[time.uncens<=quantile])
+         quant <- quantile(time.uncens, probs=0.95)
+         eval.times <-  sort(time.uncens[time.uncens<=quant])
          if (length(eval.times)>199){
             space <- floor(length(eval.times)/100)
             eval.times <- eval.times[(1:100)*space]

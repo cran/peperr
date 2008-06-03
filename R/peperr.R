@@ -2,13 +2,14 @@
 function(response, x, 
    indices=NULL,
    fit.fun, complexity=NULL, args.fit=NULL, args.complexity=NULL, 
-   parallel=FALSE, cpus=2, noclusterstart=FALSE, noclusterstop=FALSE,
+   parallel=NULL, cpus=2, clustertype=NULL, clusterhosts=NULL,
+   noclusterstart=FALSE, noclusterstop=FALSE,
    aggregation.fun=NULL, args.aggregation=NULL,
    load.list=extract.fun(list(fit.fun, complexity, aggregation.fun)), 
    load.vars=NULL, load.all=FALSE,
    trace=FALSE, debug=FALSE, peperr.lib.loc=NULL, seed=NULL)
 {
-   require(survival)
+   if(is.Surv(response)) require(survival)
    binary <- FALSE
    if (!is.null(seed)){
       if (length(seed)==1 || length(seed)==(length(indices$sample.index)+2)){
@@ -37,8 +38,9 @@ function(response, x,
       }
    }
 
-   if(parallel==TRUE){
-      sfInit(parallel=TRUE, cpus=cpus, nostart=noclusterstart)
+   if(!is.null(parallel)){
+      sfInit(parallel=parallel, cpus=cpus, nostart=noclusterstart, 
+         type=clustertype, socketHosts=clusterhosts)
       } else { 
       sfInit(nostart=noclusterstart)
    }
@@ -46,6 +48,9 @@ function(response, x,
 
    if(load.all==TRUE){
       sfExportAll()
+      for (i in 1:length(.packages())){
+         eval(call("sfLibrary", (.packages()[i]), character.only=TRUE))
+      }
    } else {
       if (!is.null(load.list)){
          for (i in seq(along=load.list$packages)){
@@ -53,8 +58,10 @@ function(response, x,
                character.only=TRUE)), silent=!debug)
          }
          for (i in seq(along=load.list$functions)){
-
             try(eval(call("sfExport", load.list$functions[i], debug=debug)), silent=!debug)
+         }
+         for (i in seq(along=load.list$variables)){
+            try(eval(call("sfExport", load.list$variables[i], debug=debug)), silent=!debug)
          }
       }
       if (!is.null(load.vars)){
@@ -255,7 +262,7 @@ function(response, x,
 }
 
    sample.error.list <- sfClusterApplyLB(as.list(1:sample.n), sample.fun)
-   stop <- FALSE
+   Stop <- FALSE
    for(i in 1:length(sample.error.list)){
       if (class(sample.error.list[[i]])=="try-error"){ 
          if (i != sample.n){
@@ -263,10 +270,10 @@ function(response, x,
          } else {
             cat("Error in full sample run:", sample.error.list[[i]])
          }
-         stop <- TRUE
+         Stop <- TRUE
       }
    }
-   if (stop) stop("Error(s) occurred in (bootstrap) sample run(s), see above")
+   if (Stop) stop("Error(s) occurred in (bootstrap) sample run(s), see above")
 
    sample.error.full <- lapply(sample.error.list, function(arg) arg$actual.error)
    sample.complexity.full <- unlist(lapply(sample.error.list, function(arg) arg$sample.complexity))
@@ -278,7 +285,7 @@ function(response, x,
    attr(null.model, "addattr") <- NULL
    } else {
    if (binary){
-   sample.lrm.full <- lapply(sample.error.list, function(arg) arg$logreg.fit)
+   sample.lrm.full <- lapply(sample.error.list, function(arg) arg$logreg.fit) # not used at the time
    sample.null.model.full <- lapply(sample.error.list, function(arg) arg$logreg.apparent)
    }
    }
@@ -343,7 +350,8 @@ function(response, x,
       attribute=fullsample.attr,
       sample.error=sample.error.full[1:(sample.n-1)], sample.complexity=sample.complexity,  
       sample.lipec=sample.lipec.full[1:(sample.n-1)], sample.pll=sample.pll.full[1:(sample.n-1)],
-      null.model=null.model, null.model.fit=km.fit, sample.null.model=sample.km.full[1:(sample.n-1)])
+      null.model=null.model, null.model.fit=km.fit, 
+      sample.null.model=sample.km.full[1:(sample.n-1)])
    } else {
       if (binary){
          output <- list(indices=list(sample.index=sample.index, not.in.sample=not.in.sample),
@@ -352,7 +360,8 @@ function(response, x,
             full.apparent=sample.error.full[[sample.n]], noinf.error=noinf.error,
             attribute=fullsample.attr,
             sample.error=sample.error.full[1:(sample.n-1)], sample.complexity=sample.complexity,
-            null.model=null.model, null.model.fit=logreg.fit, sample.null.model=sample.null.model.full[1:(sample.n-1)])
+            null.model=null.model, null.model.fit=logreg.fit,
+            sample.null.model=sample.null.model.full[1:(sample.n-1)])
       } else {
           output <- list(indices=list(sample.index=sample.index, not.in.sample=not.in.sample),
             selected.complexity=cplx, complexity=complexity, 

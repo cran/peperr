@@ -14,7 +14,7 @@ aggregation.pmpec(full.data, response, x, model, cplx=NULL, times = NULL,
 \item{x}{\code{n*p} matrix of covariates.}
 \item{model}{survival model as returned by \code{fit.fun} as used in call to \code{peperr}.}
 \item{cplx}{numeric, number of boosting steps or list, containing number of boosting steps in argument \code{stepno}.}
-\item{times}{vector of evaluation time points. If given, used as well as in calculation of full apparent and no-information error as in resampling procedure.}
+\item{times}{vector of evaluation time points. If given, used as well as in calculation of full apparent and no-information error as in resampling procedure. Not used if \code{fullsample.attr} is specified.}
 \item{type}{character.}
 \item{fullsample.attr}{vector of evaluation time points, passed in resampling procedure. Either user-defined, if \code{times} were passed as \code{args.aggregation}, or the determined time points from the \code{aggregation.fun} call with the full data set.}
 \item{\dots}{additional arguments passed to \code{pmpec} call.}
