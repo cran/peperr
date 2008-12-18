@@ -48,7 +48,8 @@ pmpec <- function(object, response=NULL, x=NULL, times, model.args=NULL, type=c(
 
     status.mat <- matrix(times,length(time),length(times),byrow=TRUE) < mod.time
 
-    probmat <- do.call("predictProb", c(list(object=object, response=response, x=x ,times=times), model.args))
+    probmat <- do.call("predictProb", c(list(object=object, response=response, x=x ,times=times),
+         model.args))
 
     weightmat <- t(t(status.mat) / eval.cens.prob) + (1 - status.mat) * matrix(status,length(status),length(times)) * matrix(1/invcensprob,length(status),length(times))
 

@@ -1,3 +1,8 @@
+1.1-1
+- independent parallel random number streams integrated -> new peperr argument RNG
+- peperr_1.1.tar.gz contained peperr_1.0-3.tar.gz by mistake
+- plot.peperr now works for non-integer complexity values as well
+
 1.1
 - new arguments of function 'peperr' are 'clustertype', to specify the type of cluster to be used ('SOCK' for socket, 'MPI', 'PVM' or 'NWS') and 'clusterhosts', that specifies the host list for socket clusters, if 'clustertype=SOCK' or 'clustertype=NWS'. 
 - function extract.fun returns additional list element 'variables', containing global variables required for computation on cluster nodes.

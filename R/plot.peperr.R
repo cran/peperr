@@ -49,7 +49,13 @@ plot.peperr <- function(x, y, ...){
    message("Press enter for next graphic")
    if ((all.equal(x.complexity,x$selected.complexity)!=TRUE)[1]){
       if(sum(x$sample.complexity==0)<length(x$sample.complexity)){
-         hist(x$sample.complexity, breaks=1:max(x$sample.complexity, x$selected.complexity), 
+         if (any(c(x$selected.complexity, x$sample.complexity)==
+                 round(c(x$selected.complexity, x$sample.complexity)))){
+            histbreaks <- 1:max(x$sample.complexity, x$selected.complexity)
+            } else {
+            histbreaks <- "Sturges"
+         }
+         hist(x$sample.complexity, breaks=histbreaks, 
             xlim=c(min(c(x$selected.complexity, x$sample.complexity)), 
                max(c(x$selected.complexity, x$sample.complexity))),
             main="Selected complexity values in bootstrap samples", 
@@ -71,7 +77,9 @@ plot.peperr <- function(x, y, ...){
             readline()
             mtpll <- (-2)*pll
             smooth.try <- try(smoothed.pll <- smooth.spline(x$sample.complexity, mtpll), silent=TRUE) 
-            if (inherits(smooth.try, "try-error")) {message("No smoothing spline available due to too less values")}  
+            if (inherits(smooth.try, "try-error")) {
+               message("No smoothing spline available due to too less values")
+            }  
             plot(x$sample.complexity, (-2)*pll, 
                main="Selected complexity and (-2)*predictive PLL in bootstrap samples",
                xlim=c(min(c(x$selected.complexity, x$sample.complexity)), 
@@ -85,7 +93,8 @@ plot.peperr <- function(x, y, ...){
                readline()
                plot(x$attribute, x$null.model, type="n", col="blue",
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.1))
+                  main="Prediction error curves", 
+                  ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.1))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], 
@@ -130,7 +139,7 @@ plot.peperr <- function(x, y, ...){
                boxplot(lipec~group, data=lipec.data,
                   main="Lebesgue integrated prediction error curve (LIPEC) in bootstrap samples", 
                   xlab="Complexity")
-               if (!is.null(x$sample.lipec[[1]])){
+               if (!is.null(x$sample.pll[[1]])){
                   pll <- c()
                   for (i in 1:length(x$sample.pll[[1]])){
                      pll <- rbind(pll, unlist(lapply(x$sample.pll, function(arg) arg[[i]])))
@@ -177,7 +186,8 @@ plot.peperr <- function(x, y, ...){
                readline()
                plot(x$attribute, x$null.model, type="n", col="blue",
                   xlab="Evaluation time points", ylab= "Prediction error",
-                  main="Prediction error curves", ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.1))
+                  main="Prediction error curves", 
+                  ylim=c(0, max(perr(x), x$full.apparent, x$null.model)+0.1))
                if (length(x$sample.error)>1){
                   for (i in 1:(length(x$sample.error))){
                      lines(x$attribute, x$sample.error[[i]], type="l", col="light grey", lty=1)

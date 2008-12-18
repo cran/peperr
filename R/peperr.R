@@ -7,17 +7,11 @@ function(response, x,
    aggregation.fun=NULL, args.aggregation=NULL,
    load.list=extract.fun(list(fit.fun, complexity, aggregation.fun)), 
    load.vars=NULL, load.all=FALSE,
-   trace=FALSE, debug=FALSE, peperr.lib.loc=NULL, seed=NULL)
+   trace=FALSE, debug=FALSE, peperr.lib.loc=NULL, 
+   RNG=c("none", "RNGstream", "SPRNG", "fixed"), seed=NULL)
 {
    if(is.Surv(response)) require(survival)
    binary <- FALSE
-   if (!is.null(seed)){
-      if (length(seed)==1 || length(seed)==(length(indices$sample.index)+2)){
-        set.seed(seed[1])
-      } else {
-      stop("Provide argument 'seed' that is integer or vector of length number of samples plus 2")
-      }
-   }
    if(is.null(aggregation.fun)){
       if(is.Surv(response)){
          aggregation.fun <- aggregation.pmpec
@@ -45,7 +39,22 @@ function(response, x,
       sfInit(nostart=noclusterstart)
    }
    sfLibrary(peperr, lib.loc=peperr.lib.loc)
-
+   RNG <- match.arg(RNG)
+   if (RNG!="none"){
+      if (RNG!="fixed"){
+         if (!is.null(seed)){
+            sfClusterSetupRNG(type=RNG, seed=seed)
+         } else {
+            sfClusterSetupRNG(type=RNG)
+         }
+      } else {
+         if (length(seed)==1 || length(seed)==(length(indices$sample.index)+2)){
+            set.seed(seed[1])
+         } else {
+            stop("Provide argument 'seed' that is integer or vector of length number of samples plus 2")
+         }
+      }
+   }
    if(load.all==TRUE){
       sfExportAll()
       for (i in 1:length(.packages())){
@@ -116,13 +125,13 @@ function(response, x,
    if (environmentName(environment(aggregation.fun))!="peperr"){sfExport("aggregation.fun")}
    if (environmentName(environment(complexity))!="peperr"){sfExport("complexity")}
    sfExport("response", "x", "sample.index.full", "sample.n", "not.in.sample.full", 
-      "args.fit", "args.complexity", "args.aggregation", "binary", "seed")
+      "args.fit", "args.complexity", "args.aggregation", "binary", "RNG", "seed")
    try(sfExport("km.weight"), silent=!debug)
 
    if(trace){message("Evaluation on slaves starts now")}
 
    sample.fun <- function(actual.sample){
-      if (!is.null(seed)){
+       if (RNG=="fixed"){
          if (length(seed)==1){
            set.seed(seed+actual.sample)
          } else {
