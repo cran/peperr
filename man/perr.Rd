@@ -12,17 +12,17 @@ perr(peperrobject, type = c("632p", "632", "apparent", "NoInf", "resample", "nul
   \item{peperrobject}{peperr object obtained by call to function \code{peperr}.}
   \item{type}{\code{"632p"} for the .632+ prediction error estimate (default), \code{"632"} for the .632 prediction error estimate. \code{"apparent"}, \code{"NoInf"}, \code{"resample"} and \code{"nullmodel"} return the apparent error, the no-information error, the mean sample error and the nullmodel fit, see Details.}
 }
-}
+
 \value{
-\code{type="632p"} and \code{type="632"}: Prediction error: Matrix, with one row per complexity value.
+If \code{type="632p"} or \code{type="632"}: Prediction error: Matrix, with one row per complexity value.
 
-\code{type="apparent"}: Apparent error of the full data set. Matrix: One row per complexity value. In case of survival response, columns correspond to evaluation timepoints, which are given in attribute \code{addattr}.
+If \code{type="apparent"}: Apparent error of the full data set. Matrix: One row per complexity value. In case of survival response, columns correspond to evaluation timepoints, which are given in attribute \code{addattr}.
 
-\code{type="NoInf"}: No information error of the full data set, i. e. evaluation in permuted data. Matrix: One row per complexity value. Columns correspond to evaluation timepoints, which are given in attribute \code{addattr}.
+If \code{type="NoInf"}: No-information error of the full data set, i. e. evaluation in permuted data. Matrix: One row per complexity value. Columns correspond to evaluation timepoints, which are given in attribute \code{addattr}.
 
-\code{"resample"}: Matrix. Mean prediction error of resampling test samples, one row per complexity value.
+If \code{type="resample"}: Matrix. Mean prediction error of resampling test samples, one row per complexity value.
 
-\code{"nullmodel"}{Vector or scalar: Null model prediction error, i.e. of fit without information of covariates. In case of survival response Kaplan-Meier estimate at each time point, if response is binary logistic regression model, else not available.}
+If \code{type="nullmodel"}: Vector or scalar: Null model prediction error, i.e. of fit without information of covariates. In case of survival response Kaplan-Meier estimate at each time point, if response is binary logistic regression model, else not available.
 }
 
 \details{

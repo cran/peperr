@@ -15,7 +15,7 @@ peperr(response, x,
 	load.vars = NULL, load.all = FALSE, 
 	trace = FALSE, debug = FALSE,
 	peperr.lib.loc=NULL, 
-        RNG=c("none", "RNGstream", "SPRNG", "fixed"), seed=NULL)
+        RNG=c("RNGstream", "SPRNG", "fixed", "none"), seed=NULL, lb=FALSE)
 }
 \arguments{
 \item{response}{Either a survival object (with \code{Surv(time, status)}, where time is an \code{n}-vector of censored survival times and status an \code{n}-vector containing event status, coded with 0 and 1) or a matrix with columns \code{time} containing survival times and \code{status} containing integers, where 0 indicates censoring, 1 the interesting event and larger numbers other competing risks. In case of binary response, vector with entries 0 and 1.}
@@ -43,6 +43,7 @@ If another cluster solution (specified by argument \code{clustertype}) shall be 
 \item{peperr.lib.loc}{location of package \pkg{peperr} if not in standard library search path (\code{.libPaths()}), to be specified for loading \pkg{peperr} onto the cluster nodes.}
 \item{RNG}{type of RNG. \code{"fixed"} requires a specified \code{seed}. \code{"RNGstream"} and \code{"SPRNG"} use default seeds, if not specified. See Details.}
 \item{seed}{seed to allow reproducibility of results. Only considered if argument \code{RNG} is not \code{"none"}. See Details.}
+\item{lb}{if TRUE and a compute cluster is used, computation of slaves is executed load balanced. See Details.}
 }
 \details{
 Validation of new model fitting approaches requires the proper use of resampling techniques for prediction error estimation. Especially in high-dimensional data situations the computational demand might be huge. \code{peperr} accelerates computation through automatically parallelisation of the resampling procedure, if a compute cluster is available. A noticeable speed-up is reached even when using a dual-core processor.
@@ -90,14 +91,15 @@ If not running in sequential mode, a specified number of R processes called node
 
 Note that a \code{set.seed} call before calling function \code{peperr} is not sufficient to allow reproducibility of results when running in parallel mode, as the slave R processes are not affected as they are own R instances. \code{peperr} provides two possibilities to make results reproducible: 
 \itemize{
-\item Use \code{RNG="RNGstream"} or \code{RNG="SPRNG"}. Independent parallel random number streams are initialized on the cluster nodes, using function \code{sfClusterSetupRNG} of package \pkg{snowfall}. A seed can be specified using argument \code{seed}, else the default values are taken. A \code{set.seed} call on the master is required additionally.
-\item If \code{RNG="fixed"}, a seed has to be specified. This can be either an integer or a vector of length number of samples +2.  In the second case, the first entry is used for the main R process, the next number of samples ones for each sample run (in parallel execution mode on slave R processes) and the last one for computation on full sample (as well on slave R process in parallel execution mode). Passing integer x is equivalent to passing vector \code{x+0:(number of samples+1)}. This procedure allows reproducibility in any case, i.e. also if the number of parallel processes changes as well as in sequential execution.
+\item Use \code{RNG="RNGstream"} or \code{RNG="SPRNG"}. Independent parallel random number streams are initialized on the cluster nodes, using function \code{sfClusterSetupRNG} of package \pkg{snowfall}. A seed can be specified using argument \code{seed}, else the default values are taken. A \code{set.seed} call on the master is required additionally and argument \code{lb=FALSE}, see below.
+\item If \code{RNG="fixed"}, a seed has to be specified. This can be either an integer or a vector of length number of samples +2.  In the second case, the first entry is used for the main R process, the next number of samples ones for each sample run (in parallel execution mode on slave R processes) and the last one for computation on full sample (as well on slave R process in parallel execution mode). Passing integer x is equivalent to passing vector \code{x+(0:(number of samples+1))}. This procedure allows reproducibility in any case, i.e. also if the number of parallel processes changes as well as in sequential execution.
 } 
+
+Load balancing (argument \code{lb}) means, that a slave gets a new job immediately after the previous is finished. This speeds up computation, but may change the order of jobs. Due to that, results are only reproducible, if \code{RNG="fixed"} is used.
 }
 
 \value{
 Object of class \code{peperr}
-
 \item{indices}{list of resampling indices.}
 \item{complexity}{passed complexity. If argument \code{complexity} not specified, 0.}
 \item{selected.complexity}{selected complexity for the full data set, if \code{complexity} was passed as function. Else equal to value \code{complexity}.}

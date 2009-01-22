@@ -1,3 +1,7 @@
+1.1-2
+- Default value of peperr argument RNG changed to 'RNGstream'
+- New peperr argument lb, to choose if computation on slaves should be executed load balanced
+
 1.1-1
 - independent parallel random number streams integrated -> new peperr argument RNG
 - peperr_1.1.tar.gz contained peperr_1.0-3.tar.gz by mistake

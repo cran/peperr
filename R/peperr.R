@@ -8,7 +8,7 @@ function(response, x,
    load.list=extract.fun(list(fit.fun, complexity, aggregation.fun)), 
    load.vars=NULL, load.all=FALSE,
    trace=FALSE, debug=FALSE, peperr.lib.loc=NULL, 
-   RNG=c("none", "RNGstream", "SPRNG", "fixed"), seed=NULL)
+   RNG=c("RNGstream", "SPRNG", "fixed", "none"), seed=NULL, lb=FALSE)
 {
    if(is.Surv(response)) require(survival)
    binary <- FALSE
@@ -40,6 +40,9 @@ function(response, x,
    }
    sfLibrary(peperr, lib.loc=peperr.lib.loc)
    RNG <- match.arg(RNG)
+   if (RNG=="RNGstream" && is.null(seed)){
+      warning("You are using a parallel random number generator ('RNGstream') with its default seed. See Details of documentation for other options.")
+   }
    if (RNG!="none"){
       if (RNG!="fixed"){
          if (!is.null(seed)){
@@ -269,8 +272,11 @@ function(response, x,
       }
    out
 }
-
-   sample.error.list <- sfClusterApplyLB(as.list(1:sample.n), sample.fun)
+   if (lb){
+      sample.error.list <- sfClusterApplyLB(as.list(1:sample.n), sample.fun)
+   } else {
+      sample.error.list <- sfLapply(as.list(1:sample.n), sample.fun)
+   }
    Stop <- FALSE
    for(i in 1:length(sample.error.list)){
       if (class(sample.error.list[[i]])=="try-error"){ 
