@@ -1,5 +1,11 @@
 PLL.coxph <- function(object, newdata, newtime, newstatus, complexity, ...){
-   logplik(x=newdata, time=newtime, status=newstatus, b=object$coefficients)
+ if(is.null(attributes(object)$which.genes)){ # required for Graf&Bauer approach
+    logplik(x = newdata, time = newtime, status = newstatus, 
+        b = object$coefficients)
+    } else {
+    z <- matrix(apply(attributes(object)$coef[attributes(object)$which.genes]*t(newdata[,attributes(object)$which.genes]), FUN=sum, MARGIN=2), ncol=1)
+    logplik(x = z, time = newtime, status = newstatus,   b = object$coefficients)
+    }
 }
 
 logplik <- function(x, time, status, b, method = c("breslow", "efron"), return.all=FALSE)

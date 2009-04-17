@@ -51,7 +51,7 @@ plot.peperr <- function(x, y, ...){
       if(sum(x$sample.complexity==0)<length(x$sample.complexity)){
          if (any(c(x$selected.complexity, x$sample.complexity)==
                  round(c(x$selected.complexity, x$sample.complexity)))){
-            histbreaks <- 1:max(x$sample.complexity, x$selected.complexity)
+            histbreaks <- 0:max(x$sample.complexity, x$selected.complexity)
             } else {
             histbreaks <- "Sturges"
          }

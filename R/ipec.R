@@ -6,9 +6,9 @@ ipec <- function(pe, eval.times, type=c("Riemann", "Lebesgue", "relativeLebesgue
    if (type == "Riemann"){
       ipec <- apply(t(pe[,1:(ncol(pe)-1), drop=FALSE])*diff(eval.times),2,sum)
    } else { 
-      actual.data <- as.data.frame(matrix(1, ncol=1, nrow=length(time)))
       time <- response[,"time"]
       status <- response[,"status"]
+      actual.data <- as.data.frame(matrix(1, ncol=1, nrow=length(time)))
       actual.data$time <- time
       actual.data$status <- status
       km.fit <- survfit(Surv(time, status)~1, data=actual.data)

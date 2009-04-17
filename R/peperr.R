@@ -199,9 +199,9 @@ function(response, x,
 #                      newtime=time[not.in.sample.full[[actual.sample]]], 
 #                      newstatus=status[not.in.sample.full[[actual.sample]]], complexity=list.sample.complexity)
 #                   pll.oob.null <- rbind(pll.oob.null, pll.oob.null.i)
-                  pll.oob.i <- PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
+                  pll.oob.i <- try(PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
                      newtime=time[not.in.sample.full[[actual.sample]]], 
-                     newstatus=status[not.in.sample.full[[actual.sample]]], complexity=list.sample.complexity)
+                     newstatus=status[not.in.sample.full[[actual.sample]]], complexity=list.sample.complexity))
                   pll.oob <- rbind(pll.oob, pll.oob.i)
                }
             } else {
@@ -235,6 +235,7 @@ function(response, x,
                    if (is.Surv(response)){
                      km.fit <- survival::survfit(Surv(time, status)~1,
                         data=actual.data[sample.index.full[[actual.sample]],])
+cat("Kaplan-Meier, step", actual.sample)
                      km.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
                         response=response[unique(not.in.sample.full[[actual.sample]]),],
                         x=x[unique(not.in.sample.full[[actual.sample]]),, drop=FALSE], model=km.fit,
@@ -248,9 +249,9 @@ function(response, x,
 #                      newtime=time[not.in.sample.full[[actual.sample]]], 
 #                      newstatus=status[not.in.sample.full[[actual.sample]]], complexity=list.sample.complexity)
 #                         pll.oob.null <- rbind(pll.oob.null, pll.oob.null.i)
-                        pll.oob.i <- PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
+                        pll.oob.i <- try(PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
                            newtime=time[not.in.sample.full[[actual.sample]]], 
-                           newstatus=status[not.in.sample.full[[actual.sample]]], complexity=sample.complexity[i])
+                           newstatus=status[not.in.sample.full[[actual.sample]]], complexity=sample.complexity[i]))
                         pll.oob <- rbind(pll.oob, pll.oob.i)
                      }
                   } else {
