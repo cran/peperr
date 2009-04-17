@@ -15,7 +15,8 @@ peperr(response, x,
 	load.vars = NULL, load.all = FALSE, 
 	trace = FALSE, debug = FALSE,
 	peperr.lib.loc=NULL, 
-        RNG=c("RNGstream", "SPRNG", "fixed", "none"), seed=NULL, lb=FALSE)
+        RNG=c("RNGstream", "SPRNG", "fixed", "none"), seed=NULL, 
+        lb=FALSE, sr=FALSE, sr.name="default", sr.restore=FALSE)
 }
 \arguments{
 \item{response}{Either a survival object (with \code{Surv(time, status)}, where time is an \code{n}-vector of censored survival times and status an \code{n}-vector containing event status, coded with 0 and 1) or a matrix with columns \code{time} containing survival times and \code{status} containing integers, where 0 indicates censoring, 1 the interesting event and larger numbers other competing risks. In case of binary response, vector with entries 0 and 1.}
@@ -44,6 +45,9 @@ If another cluster solution (specified by argument \code{clustertype}) shall be 
 \item{RNG}{type of RNG. \code{"fixed"} requires a specified \code{seed}. \code{"RNGstream"} and \code{"SPRNG"} use default seeds, if not specified. See Details.}
 \item{seed}{seed to allow reproducibility of results. Only considered if argument \code{RNG} is not \code{"none"}. See Details.}
 \item{lb}{if TRUE and a compute cluster is used, computation of slaves is executed load balanced. See Details.}
+\item{sr}{if TRUE, intermediate results are saved. If execution is interrupted, they can be restored by setting argument sr.restore to TRUE. See documentation of package \pkg{snowfall} for details}
+\item{sr.name}{if \code{sr} is set to TRUE and more than one computation runs simultaneously, unique names need to be used.}
+\item{sr.restore}{if \code{sr} is set to TRUE, an interrupted computation is restarted.}
 }
 \details{
 Validation of new model fitting approaches requires the proper use of resampling techniques for prediction error estimation. Especially in high-dimensional data situations the computational demand might be huge. \code{peperr} accelerates computation through automatically parallelisation of the resampling procedure, if a compute cluster is available. A noticeable speed-up is reached even when using a dual-core processor.
@@ -53,10 +57,10 @@ Resampling based prediction error estimation requires for each split in training
 Functions for fitting the model, determination of model complexity, if required by the fitting procedure, and aggregating the prediction error are passed as arguments \code{fit.fun}, \code{complexity} and \code{aggregation.fun}. Already available functions are 
 
 for model fit:
-\code{fit.CoxBoost}, \code{fit.coxph}, \code{fit.LASSO}
+\code{fit.CoxBoost}, \code{fit.coxph}, \code{fit.LASSO}, \code{fit.rsf_mtry}
 
 to determine complexity:
-\code{complexity.mincv.CoxBoost}, \code{complexity.ipec.CoxBoost}, \code{complexity.LASSO}
+\code{complexity.mincv.CoxBoost}, \code{complexity.ipec.CoxBoost}, \code{complexity.LASSO}, \code{complexity.ipec.rsf_mtry}
 
 to aggregate prediction error:
 \code{aggregation.pmpec}, \code{aggregation.brier}, \code{aggregation.misclass}

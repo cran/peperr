@@ -8,7 +8,8 @@ function(response, x,
    load.list=extract.fun(list(fit.fun, complexity, aggregation.fun)), 
    load.vars=NULL, load.all=FALSE,
    trace=FALSE, debug=FALSE, peperr.lib.loc=NULL, 
-   RNG=c("RNGstream", "SPRNG", "fixed", "none"), seed=NULL, lb=FALSE)
+   RNG=c("RNGstream", "SPRNG", "fixed", "none"), seed=NULL, 
+   lb=FALSE, sr=FALSE, sr.name="default", sr.restore=FALSE)
 {
    if(is.Surv(response)) require(survival)
    binary <- FALSE
@@ -160,7 +161,10 @@ function(response, x,
 
       if (is.Surv(response)){
          lipec.oob <- c()
+         lipec.oob.null <- c()
          pll.oob <- c()
+         #pll.oob.null <- c()
+
       }
       actual.error <- c()
       sample.fit.list <- list()
@@ -184,12 +188,18 @@ function(response, x,
                km.fit <- survival::survfit(Surv(time, status)~1,
                   data=actual.data[unique(sample.index.full[[actual.sample]]),])
                km.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
-                  response=response[unique(sample.index.full[[actual.sample]]),],
-                  x=x[unique(sample.index.full[[actual.sample]]),, drop=FALSE], model=km.fit, 
+                  response=response[unique(not.in.sample.full[[actual.sample]]),],
+                  x=x[unique(not.in.sample.full[[actual.sample]]),, drop=FALSE], model=km.fit, 
                   fullsample.attr=fullsample.attr), args.aggregation))
+               lipec.oob.null.i  <- sum(km.apparent[1:(length(km.weight))]*km.weight, na.rm=TRUE)
+               lipec.oob.null <- rbind(lipec.oob.null, lipec.oob.null.i)
                lipec.oob.i <- sum(actual.error.i[1:(length(km.weight))]*km.weight, na.rm=TRUE)
                lipec.oob <- rbind(lipec.oob, lipec.oob.i)
                if (exists(paste("PLL.", class(sample.fit), sep=""))){
+# 		   pll.oob.null.i <- PLL(object=km.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
+#                      newtime=time[not.in.sample.full[[actual.sample]]], 
+#                      newstatus=status[not.in.sample.full[[actual.sample]]], complexity=list.sample.complexity)
+#                   pll.oob.null <- rbind(pll.oob.null, pll.oob.null.i)
                   pll.oob.i <- PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
                      newtime=time[not.in.sample.full[[actual.sample]]], 
                      newstatus=status[not.in.sample.full[[actual.sample]]], complexity=list.sample.complexity)
@@ -227,12 +237,18 @@ function(response, x,
                      km.fit <- survival::survfit(Surv(time, status)~1,
                         data=actual.data[sample.index.full[[actual.sample]],])
                      km.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
-                        response=response[unique(sample.index.full[[actual.sample]]),],
-                        x=x[unique(sample.index.full[[actual.sample]]),, drop=FALSE], model=km.fit,
+                        response=response[unique(not.in.sample.full[[actual.sample]]),],
+                        x=x[unique(not.in.sample.full[[actual.sample]]),, drop=FALSE], model=km.fit,
                         fullsample.attr=fullsample.attr), args.aggregation))
+                     lipec.oob.null.i  <- sum(km.apparent[1:(length(km.weight))]*km.weight, na.rm=TRUE)
+                     lipec.oob.null <- rbind(lipec.oob.null, lipec.oob.null.i)
                      lipec.oob.i <- sum(actual.error.i[1:(length(km.weight))]*km.weight, na.rm=TRUE)
                      lipec.oob <- rbind(lipec.oob, lipec.oob.i)
                      if (exists(paste("PLL.", class(sample.fit), sep=""))){
+#  			 pll.oob.null.i <- PLL(object=km.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
+#                      newtime=time[not.in.sample.full[[actual.sample]]], 
+#                      newstatus=status[not.in.sample.full[[actual.sample]]], complexity=list.sample.complexity)
+#                         pll.oob.null <- rbind(pll.oob.null, pll.oob.null.i)
                         pll.oob.i <- PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
                            newtime=time[not.in.sample.full[[actual.sample]]], 
                            newstatus=status[not.in.sample.full[[actual.sample]]], complexity=sample.complexity[i])
@@ -257,10 +273,13 @@ function(response, x,
 
       if (is.Surv(response)){
          dimnames(lipec.oob) <- NULL
+         dimnames(lipec.oob.null) <- NULL
          dimnames(pll.oob) <- NULL
+  #      dimnames(pll.oob.null) <- NULL
          out <- list(actual.error=actual.error, sample.complexity=sample.complexity, 
             sample.fit=sample.fit.list,
-            lipec.oob=lipec.oob, pll.oob=pll.oob, km.apparent=km.apparent)
+            lipec.oob=lipec.oob, lipec.oob.null=lipec.oob.null, pll.oob=pll.oob, #pll.oob.null=pll.oob.null, 
+km.apparent=km.apparent)
       } else {
          if(binary){
             out <- list(actual.error=actual.error, sample.complexity=sample.complexity,
@@ -275,7 +294,12 @@ function(response, x,
    if (lb){
       sample.error.list <- sfClusterApplyLB(as.list(1:sample.n), sample.fun)
    } else {
+      if(sr){
+      sample.error.list <- sfClusterApplySR(as.list(1:sample.n), sample.fun, 
+                             name=sr.name, restore=sr.restore)
+      } else {
       sample.error.list <- sfLapply(as.list(1:sample.n), sample.fun)
+      }
    }
    Stop <- FALSE
    for(i in 1:length(sample.error.list)){
@@ -295,7 +319,9 @@ function(response, x,
    sample.fit.full <- lapply(sample.error.list, function(arg) arg$sample.fit)
    if (is.Surv(response)){
    sample.lipec.full <- lapply(sample.error.list, function(arg) arg$lipec.oob)
+   sample.lipec.null.full <- lapply(sample.error.list, function(arg) arg$lipec.oob.null)
    sample.pll.full <- lapply(sample.error.list, function(arg) arg$pll.oob)
+   #sample.pll.null.full <- lapply(sample.error.list, function(arg) arg$pll.oob.null)
    sample.km.full <- lapply(sample.error.list, function(arg) arg$km.apparent)
    attr(null.model, "addattr") <- NULL
    } else {
@@ -364,7 +390,9 @@ function(response, x,
       full.apparent=sample.error.full[[sample.n]], noinf.error=noinf.error, 
       attribute=fullsample.attr,
       sample.error=sample.error.full[1:(sample.n-1)], sample.complexity=sample.complexity,  
-      sample.lipec=sample.lipec.full[1:(sample.n-1)], sample.pll=sample.pll.full[1:(sample.n-1)],
+      sample.lipec=sample.lipec.full[1:(sample.n-1)], 
+      sample.lipec.null=sample.lipec.null.full[1:(sample.n-1)],
+      sample.pll=sample.pll.full[1:(sample.n-1)],
       null.model=null.model, null.model.fit=km.fit, 
       sample.null.model=sample.km.full[1:(sample.n-1)])
    } else {

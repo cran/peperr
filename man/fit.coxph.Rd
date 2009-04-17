@@ -19,5 +19,5 @@ CoxBoost object
 \details{
 Function is basically a wrapper around \code{coxph} of package \pkg{survival}. 
 }
-\seealso{ \code{peperr}, \code{\link[survival:survival-package]{coxph}}}
+\seealso{ \code{peperr}, \code{\link[survival]{coxph}}}
 \keyword{models} \keyword{regression} \keyword{survival}

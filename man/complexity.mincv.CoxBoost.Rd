@@ -19,5 +19,5 @@ Scalar value giving the optimal number of boosting steps.
 \details{
 Function is basically a wrapper around \code{cv.CoxBoost} of package \code{CoxBoost}. A K-fold cross-validation (default K=10) is performed to search the optimal number of boosting steps, per default in the interval (0, \code{maxstepno}=100). The number of boosting steps with minimum mean partial log-likelihood is returned. Calling \code{peperr}, the default arguments of \code{cv.CoxBoost} can be changed by passing a named list containing these as argument \code{args.complexity}.
 }
-\seealso{\code{peperr}, \code{\link[CoxBoost:CoxBoost-package]{cv.CoxBoost}}}
+\seealso{\code{peperr}, \code{\link[CoxBoost]{cv.CoxBoost}}}
 \keyword{models} \keyword{regression} \keyword{survival}

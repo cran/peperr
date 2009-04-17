@@ -28,5 +28,5 @@ Scalar value giving the number of boosting steps.
 \details{
 Plotting the .632+ estimator for each time point given in \code{eval.times} results in a prediction error curve. A summary measure can be obtained by integrating over time. \code{complexity.ripec.CoxBoost} computes a Riemann integral, while \code{complexity.ipec.CoxBoost} uses a Lebesgue-like integral taking Kaplan-Meier estimates as weights. The number of boosting steps of the interval (0, \code{boost.steps}), for which the minimal IPEC is obtained, is returned.
 }
-\seealso{ \code{peperr}, \code{\link[CoxBoost:CoxBoost-package]{CoxBoost}} }
+\seealso{ \code{peperr}, \code{\link[CoxBoost]{CoxBoost}} }
 \keyword{models} \keyword{regression} \keyword{survival}

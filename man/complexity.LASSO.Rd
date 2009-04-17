@@ -19,5 +19,5 @@ Scalar value giving the optimal value for lambda.
 \details{
 Function is basically a wrapper around \code{optL1} of package \pkg{penalized}.  Calling \code{peperr}, default arguments of \code{optL1} can be changed by passing a named list containing these as argument \code{args.complexity}.
 }
-\seealso{\code{peperr}, \code{\link[penalized:penalized-package]{optL1}}}
+\seealso{\code{peperr}, \code{\link[penalized]{optL1}}}
 \keyword{models} \keyword{regression} \keyword{survival}

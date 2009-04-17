@@ -19,5 +19,5 @@ penfit object
 \details{
 Function is basically a wrapper around function \code{penalized} of package \code{penalized}. 
 }
-\seealso{ \code{peperr}, \code{\link[penalized:penalized-package]{penalized}}}
+\seealso{ \code{peperr}, \code{\link[penalized]{penalized}}}
 \keyword{models} \keyword{regression} \keyword{survival}

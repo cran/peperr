@@ -19,5 +19,5 @@ CoxBoost object
 \details{
 Function is basically a wrapper around \code{CoxBoost} of package \pkg{CoxBoost}. A Cox proportional hazards model is fitted by componentwise likelihood based boosting, especially suited for models with many covariates and few observations. 
 }
-\seealso{ \code{peperr}, \code{\link[CoxBoost:CoxBoost-package]{CoxBoost}}}
+\seealso{ \code{peperr}, \code{\link[CoxBoost]{CoxBoost}}}
 \keyword{models} \keyword{regression} \keyword{survival}
