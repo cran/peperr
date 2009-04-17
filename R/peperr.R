@@ -11,8 +11,7 @@ function(response, x,
    RNG=c("RNGstream", "SPRNG", "fixed", "none"), seed=NULL, 
    lb=FALSE, sr=FALSE, sr.name="default", sr.restore=FALSE)
 {
-   if(is.Surv(response)) require(survival)
-   binary <- FALSE
+  binary <- FALSE
    if(is.null(aggregation.fun)){
       if(is.Surv(response)){
          aggregation.fun <- aggregation.pmpec
@@ -67,7 +66,7 @@ function(response, x,
    } else {
       if (!is.null(load.list)){
          for (i in seq(along=load.list$packages)){
-            try(eval(call("sfLibrary", load.list$packages[i], 
+            try(eval("sfLibrary"(load.list$packages[i], 
                character.only=TRUE)), silent=!debug)
          }
          for (i in seq(along=load.list$functions)){
@@ -305,9 +304,9 @@ km.apparent=km.apparent)
    for(i in 1:length(sample.error.list)){
       if (class(sample.error.list[[i]])=="try-error"){ 
          if (i != sample.n){
-            cat("Error in run", i, ":", sample.error.list[[i]])
+            cat("Error in run", i, ":", sample.error.list[[i]], "\n")
          } else {
-            cat("Error in full sample run:", sample.error.list[[i]])
+            cat("Error in full sample run:", sample.error.list[[i]], "\n")
          }
          Stop <- TRUE
       }

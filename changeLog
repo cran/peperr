@@ -1,3 +1,6 @@
+1.1-5
+- Bug in function pmpec() fixed (error message for argument type="NoInf")
+
 1.1-4
 - New peperr() arguments 'sr', 'sr.name' and 'sr.restore' to allow for restoring previously saved results
 - Incorporation of interface to package randomSurvivalForest: Functions fit.rsf_mtry, complexity.ipec.rsf_mtry allow for selection of number of candidate values at each node by IPEC
