@@ -5,7 +5,7 @@
 Extracts predicted survival probabilities for survival models fitted by Cox proportional hazards model, providing an interface as required by \code{pmpec}. 
 }
 \usage{
-predictProb.coxph(object, response, x, times, ...)
+\method{predictProb}{coxph}(object, response, x, times, \dots)
 }
 \arguments{
 \item{object}{a fitted model of class \code{coxph}.}

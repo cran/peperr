@@ -1,10 +1,8 @@
 useDynLib(peperr,noinf)
 import(snowfall, survival)
 export(peperr, perr, pmpec, extract.fun, resample.indices, ipec,  
-complexity.ipec.CoxBoost, complexity.ripec.CoxBoost, complexity.mincv.CoxBoost, complexity.LASSO, complexity.ipec.rsf_mtry,
-fit.CoxBoost, fit.coxph, fit.LASSO, fit.rsf_mtry,
-PLL, PLL.CoxBoost, PLL.coxph, 
-predictProb, predictProb.CoxBoost, predictProb.survfit, predictProb.coxph, predictProb.rsf,
+complexity.ipec.CoxBoost, complexity.ripec.CoxBoost, complexity.mincv.CoxBoost, complexity.LASSO, fit.CoxBoost, fit.coxph, fit.LASSO, PLL, PLL.CoxBoost, PLL.coxph, 
+predictProb, predictProb.CoxBoost, predictProb.survfit, predictProb.coxph, 
 aggregation.misclass, aggregation.brier, aggregation.pmpec)
 S3method(print,peperr)
 S3method(summary,peperr)

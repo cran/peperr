@@ -5,7 +5,7 @@
 Extracts predicted survival probabilities for survival models fitted by \code{survfit}, providing an interface as required by \code{pmpec}. 
 }
 \usage{
-predictProb.survfit(object, response, x, times, train.data,  ...)
+\method{predictProb}{survfit}(object, response, x, times, train.data, \dots)
 }
 \arguments{
 \item{object}{a fitted model of class \code{survfit}.}

@@ -5,7 +5,7 @@
 Extracts the predictive partial log-likelihood from a coxph model fit.
 }
 \usage{
-PLL.coxph(object, newdata, newtime, newstatus, complexity, ...)
+\method{PLL}{coxph}(object, newdata, newtime, newstatus, complexity, \dots)
 }
 \arguments{
   \item{object}{fitted model of class \code{coxph}.}

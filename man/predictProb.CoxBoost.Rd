@@ -5,7 +5,7 @@
 Extracts predicted survival probabilities from survival model fitted by CoxBoost, providing an interface as required by \code{pmpec}. 
 }
 \usage{
-predictProb.CoxBoost(object, response, x, times, complexity, ...)
+\method{predictProb}{CoxBoost}(object, response, x, times, complexity, \dots)
 }
 \arguments{
 \item{object}{a fitted model of class \code{CoxBoost}.}

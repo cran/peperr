@@ -5,7 +5,7 @@
 Extracts the predictive partial log-likelihood from a CoxBoost model fit.
 }
 \usage{
-PLL.CoxBoost(object, newdata, newtime, newstatus, complexity, ...)
+\method{PLL}{CoxBoost}(object, newdata, newtime, newstatus, complexity, \dots)
 }
 \arguments{
   \item{object}{fitted model of class \code{CoxBoost}.}

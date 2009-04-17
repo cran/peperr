@@ -1,3 +1,6 @@
+1.1-7
+- Suggestion of package randomSurvivalForest resolved, as this package was archived.
+
 1.1-6
 - bug concerning weighting in censored competing risks situation in function pmpec() fixed
 
