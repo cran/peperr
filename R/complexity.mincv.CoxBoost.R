@@ -1,5 +1,4 @@
-`complexity.mincv.CoxBoost` <-
-function(response, x, full.data, ...){
+`complexity.mincv.CoxBoost` <- function(response, x, full.data, ...){
    require(CoxBoost)
    time <- response[,"time"]
    status <- response[,"status"]

@@ -7,7 +7,7 @@ pmpec <- function(object, response=NULL, x=NULL, times, model.args=NULL, type=c(
        if(!is.null(data)){
           time <- data$time
           status <- data$status
-          x <- as.matrix(data[,!(names(data) %in% c("time", "status"))])
+          x <- as.matrix(data[,!(names(data) %in% c("time", "status")), drop=FALSE])
        } else {
           stop("Please pass either arguments 'response' and 'x' or 'data'")
        }

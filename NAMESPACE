@@ -1,6 +1,6 @@
 useDynLib(peperr,noinf)
 import(snowfall, survival)
-export(peperr, perr, pmpec, extract.fun, resample.indices,  
+export(peperr, perr, pmpec, extract.fun, resample.indices, ipec,  
 complexity.ipec.CoxBoost, complexity.ripec.CoxBoost, complexity.mincv.CoxBoost, complexity.LASSO,
 fit.CoxBoost, fit.coxph, fit.LASSO,
 PLL, PLL.CoxBoost, PLL.coxph, 

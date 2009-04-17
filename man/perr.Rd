@@ -5,7 +5,8 @@
 Extracts prediction error estimates from \code{peperr} objects. 
 }
 \usage{
-perr(peperrobject, type = c("632p", "632", "apparent", "NoInf", "resample", "nullmodel"))
+perr(peperrobject, 
+    type = c("632p", "632", "apparent", "NoInf", "resample", "nullmodel"))
 }
 
 \arguments{
@@ -36,7 +37,7 @@ Gerds, T. and Schumacher, M. (2007) Efron-type measures of prediction error for 
 
 Schumacher, M. and Binder, H., and Gerds, T. (2007) Assessment of Survival Prediction Models in High-Dimensional Settings. Bioinformatics, 23, 1768-1774.}
 
-\seealso{\code{\link{peperr}}}
+\seealso{\code{\link{peperr}}, \code{\link{ipec}}}
 
 \examples{
 \dontrun{

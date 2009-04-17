@@ -3,8 +3,9 @@
 \title{Calculate prediction error curves}
 \description{Calculation of prediction error curve from a survival response and predicted probabilities of survival.}
 \usage{
-pmpec(object, response=NULL, x=NULL, times, model.args=NULL, type=c("PErr","NoInf"), 
-	external.time=NULL, external.status=NULL, data=NULL)
+pmpec(object, response=NULL, x=NULL, times, model.args=NULL, 
+    type=c("PErr","NoInf"), external.time=NULL, external.status=NULL, 
+    data=NULL)
 }
 \arguments{
 \item{object}{fitted model of a class for which the interface function \code{predictProb.class} is available.}

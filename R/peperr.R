@@ -151,7 +151,7 @@ function(response, x,
       if (is.function(complexity)){
          sample.complexity <- do.call("complexity",
             c(list(response=response[unique(sample.index.full[[actual.sample]]),],
-            x=x[unique(sample.index.full[[actual.sample]]),], full.data=actual.data), args.complexity))
+            x=x[unique(sample.index.full[[actual.sample]]),, drop=FALSE], full.data=actual.data), args.complexity))
       } else {
          if (is.vector(complexity)){
             sample.complexity <- complexity
@@ -168,14 +168,14 @@ function(response, x,
          for (i in 1:length(sample.complexity[[1]])){
             list.sample.complexity <- lapply(sample.complexity, function(arg) arg[i])
             sample.fit <- do.call("fit.fun", c(list(response=response[unique(sample.index.full[[actual.sample]]),],
-               x=x[unique(sample.index.full[[actual.sample]]),], 
+               x=x[unique(sample.index.full[[actual.sample]]),, drop=FALSE], 
                cplx=list.sample.complexity), args.fit))
             sample.fit.list[[i]] <- sample.fit
          #class(sample.fit) <- c(class(sample.fit), "peperrinterinternal")
 
             actual.error.i <-  do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent",
                response=response[not.in.sample.full[[actual.sample]],], 
-               x=x[not.in.sample.full[[actual.sample]],], model=sample.fit, 
+               x=x[not.in.sample.full[[actual.sample]],, drop=FALSE], model=sample.fit, 
                cplx=list.sample.complexity, fullsample.attr=fullsample.attr), 
                args.aggregation))
             actual.error <- rbind(actual.error, actual.error.i)
@@ -185,12 +185,12 @@ function(response, x,
                   data=actual.data[unique(sample.index.full[[actual.sample]]),])
                km.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
                   response=response[unique(sample.index.full[[actual.sample]]),],
-                  x=x[unique(sample.index.full[[actual.sample]]),], model=km.fit, 
+                  x=x[unique(sample.index.full[[actual.sample]]),, drop=FALSE], model=km.fit, 
                   fullsample.attr=fullsample.attr), args.aggregation))
                lipec.oob.i <- sum(actual.error.i[1:(length(km.weight))]*km.weight, na.rm=TRUE)
                lipec.oob <- rbind(lipec.oob, lipec.oob.i)
                if (exists(paste("PLL.", class(sample.fit), sep=""))){
-                  pll.oob.i <- PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],],
+                  pll.oob.i <- PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
                      newtime=time[not.in.sample.full[[actual.sample]]], 
                      newstatus=status[not.in.sample.full[[actual.sample]]], complexity=list.sample.complexity)
                   pll.oob <- rbind(pll.oob, pll.oob.i)
@@ -201,7 +201,7 @@ function(response, x,
                      family=binomial())
                   logreg.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent",  
                      response=response[unique(sample.index.full[[actual.sample]]),],
-                     x=x[unique(sample.index.full[[actual.sample]]),], model=logreg.fit), 
+                     x=x[unique(sample.index.full[[actual.sample]]),, drop=FALSE], model=logreg.fit), 
                      args.aggregation))
                   }
                }
@@ -211,14 +211,14 @@ function(response, x,
                 for (i in 1:length(sample.complexity)){
                    sample.fit <- do.call("fit.fun",
                       c(list(response=response[unique(sample.index.full[[actual.sample]]),],
-                      x=x[unique(sample.index.full[[actual.sample]]),], 
+                      x=x[unique(sample.index.full[[actual.sample]]),, drop=FALSE], 
                      cplx=sample.complexity[i]), args.fit))
                      sample.fit.list[[i]] <- sample.fit
          #class(sample.fit) <- c(class(sample.fit), "peperrinterinternal")
 
                    actual.error.i <-  do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent",
                       response=response[not.in.sample.full[[actual.sample]],], 
-                      x=x[not.in.sample.full[[actual.sample]],], model=sample.fit, 
+                      x=x[not.in.sample.full[[actual.sample]],,drop=FALSE], model=sample.fit, 
                       cplx=sample.complexity[i], fullsample.attr=fullsample.attr), 
                       args.aggregation))
                    actual.error <- rbind(actual.error, actual.error.i)
@@ -228,12 +228,12 @@ function(response, x,
                         data=actual.data[sample.index.full[[actual.sample]],])
                      km.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent", 
                         response=response[unique(sample.index.full[[actual.sample]]),],
-                        x=x[unique(sample.index.full[[actual.sample]]),], model=km.fit,
+                        x=x[unique(sample.index.full[[actual.sample]]),, drop=FALSE], model=km.fit,
                         fullsample.attr=fullsample.attr), args.aggregation))
                      lipec.oob.i <- sum(actual.error.i[1:(length(km.weight))]*km.weight, na.rm=TRUE)
                      lipec.oob <- rbind(lipec.oob, lipec.oob.i)
                      if (exists(paste("PLL.", class(sample.fit), sep=""))){
-                        pll.oob.i <- PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],],
+                        pll.oob.i <- PLL(object=sample.fit, newdata=x[not.in.sample.full[[actual.sample]],, drop=FALSE],
                            newtime=time[not.in.sample.full[[actual.sample]]], 
                            newstatus=status[not.in.sample.full[[actual.sample]]], complexity=sample.complexity[i])
                         pll.oob <- rbind(pll.oob, pll.oob.i)
@@ -244,7 +244,7 @@ function(response, x,
                         family=binomial())
                      logreg.apparent <- do.call("aggregation.fun", c(list(full.data=actual.data, type="apparent",  
                         response=response[unique(sample.index.full[[actual.sample]]),],
-                        x=x[unique(sample.index.full[[actual.sample]]),], 
+                        x=x[unique(sample.index.full[[actual.sample]]),, drop=FALSE], 
                         model=logreg.fit), args.aggregation))
                      }
                      }

@@ -36,7 +36,7 @@ If another cluster solution (specified by argument \code{clustertype}) shall be 
 \item{aggregation.fun}{function that evaluates the prediction error for a model fitted by the function given in \code{fit.fun}, see Details. If not specified, function \code{aggregation.pmpec} is taken if response is survival object, in case of binary response function \code{aggregation.brier}.}
 \item{args.aggregation}{named list of arguments to be passed to the function given in argument \code{aggregation.fun}.}
 \item{load.list}{a named list with element \code{packages}, \code{functions} and \code{variables} containing quoted names of libraries, functions and global variables required for computation on cluster nodes. The default extracts automatically the libraries, functions and global variables of the, potentially user-defined, functions \code{fit.fun}, \code{complexity} and \code{aggregation.fun}, see function \code{extract.fun}. Can be set to NULL, e.g. if no libraries, functions and variables are needed. Alternatively, use argument \code{load.all}. See Details.}
-\item{load.vars}{a named list with global variables required for computation on cluster nodes. See Details. Relict, global variabels can now be passed as list element \code{variables} of argument \code{load list}.}
+\item{load.vars}{a named list with global variables required for computation on cluster nodes. See Details. Relict, global variabels can now be passed as list element \code{variables} of argument \code{load.list}.}
 \item{load.all}{logical. If set to TRUE, all variables, functions and libraries of the current global environment are loaded on cluster nodes. See Details.}
 \item{trace}{logical. If TRUE, output about the current execution step is printed (if running parallel: printed on nodes, that means not visible in master R process, see Details).}
 \item{debug}{if TRUE, information concerning export of variables is given.}
@@ -103,7 +103,7 @@ Object of class \code{peperr}
 \item{indices}{list of resampling indices.}
 \item{complexity}{passed complexity. If argument \code{complexity} not specified, 0.}
 \item{selected.complexity}{selected complexity for the full data set, if \code{complexity} was passed as function. Else equal to value \code{complexity}.}
-\item{response}{passed response. If argument \code{complexity} not specified, 0.}
+\item{response}{passed response.}
 \item{full.model.fit}{List, one entry per complexity value. Fitted model of the full data set by passed \code{fit.fun}.}
 \item{full.apparent}{full apparent error of the full data set. Matrix: One row per complexity value. In case of survival response, columns correspond to evaluation timepoints, which are returned in value \code{attribute}.}
 \item{noinf.error}{No information error of the full data set, i. e. evaluation in permuted data. Matrix: One row per complexity value. Columns correspond to evaluation timepoints, which are returned in \code{attribute}.}
