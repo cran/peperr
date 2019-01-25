@@ -1,6 +1,5 @@
 predictProb.coxph <- function (object, response, x, times, ...)
 {
-    require(survival)
     newdata <- as.data.frame(x)
     newdata$time <- response[, "time"]
     newdata$status <- response[, "status"]

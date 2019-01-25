@@ -1,7 +1,6 @@
 
 pmpec <- function(object, response=NULL, x=NULL, times, model.args=NULL, type=c("PErr","NoInf"), 
                   external.time=NULL, external.status=NULL, data=NULL) {
-    require(survival)
     type <- match.arg(type)
 
     if(is.null(response)&&is.null(x)) {

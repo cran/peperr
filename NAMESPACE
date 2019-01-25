@@ -8,3 +8,14 @@ S3method(print,peperr)
 S3method(summary,peperr)
 S3method(plot,peperr)
 
+importFrom("graphics", "boxplot", "hist", "legend", "lines", "plot",
+           "points")
+importFrom("stats", "binomial", "glm", "predict", "quantile",
+           "smooth.spline")
+importFrom("utils", "getFromNamespace")
+
+S3method(PLL, CoxBoost)
+S3method(PLL, coxph)
+S3method(predictProb, CoxBoost)
+S3method(predictProb, coxph)
+S3method(predictProb, survfit)

@@ -1,7 +1,6 @@
 `aggregation.pmpec` <-
 function(full.data, response, x, model, cplx=NULL, times=NULL, type=c("apparent", "noinf"), 
    fullsample.attr=NULL, ...){ 
-   require(survival)   
 
    xnames <- names(x) 
    time <- response[,"time"]

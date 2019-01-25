@@ -3,7 +3,6 @@ function(response, x, boot.n.c=10, boost.steps=100,
    eval.times=NULL, smooth=FALSE, full.data, ...){
    require(CoxBoost)
    require(locfit)
-   require(survival)
    actual.data.c <- as.data.frame(x)
    xnames <- names(actual.data.c)
    time <- response[,"time"]
