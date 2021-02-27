@@ -1,7 +1,7 @@
 `extract.fun` <-
 function(funs=NULL) 
 {
-   require(codetools)
+   #requireNamespace(codetools)
    if (is.null(funs)){
       extract.packages <- (.packages())
       variables <- c()

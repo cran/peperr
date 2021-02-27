@@ -3,14 +3,14 @@ function(fun)
 {
    function.list <- c()
    package.list <- c()
-   variable.list <- findGlobals(fun, merge=FALSE)$variables
+   variable.list <- codetools::findGlobals(fun, merge=FALSE)$variables
 
    loclib <- c(grep("require", as.vector(body(fun))), 
                 grep("library", as.vector(body(fun))))
    for (i in loclib){
       package.list <- c(package.list, as.character(body(fun)[[i]][[2]]))
    }
-   allfuns <- findGlobals(fun, merge=FALSE)$functions
+   allfuns <- codetools::findGlobals(fun, merge=FALSE)$functions
    for (i in 1:length(allfuns)){
    name <- try(get(as.character(allfuns[i])), silent=TRUE)
      if(!class(name)=="try-error"){ 

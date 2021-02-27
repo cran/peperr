@@ -1,7 +1,7 @@
 #include <math.h>
 //#include <stdio.h>
 
-void noinf(double *weight, int* status, double* prob, int *n, int *times, double *err)
+void C_noinf(double *weight, int* status, double* prob, int *n, int *times, double *err)
 {
     int i, j, k;
     

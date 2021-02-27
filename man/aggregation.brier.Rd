@@ -5,8 +5,8 @@
 Evaluate the Brier score, i.e. prediction error, for a fitted model on new data. To be used as argument \code{aggregation.fun} in \code{peperr} call. 
 }
 \usage{
-aggregation.brier(full.data=NULL, response, x, model, cplx=NULL,  type=c("apparent", "noinf"), 
-   fullsample.attr = NULL, ...)
+aggregation.brier(full.data=NULL, response, x, model, cplx=NULL,  
+type=c("apparent", "noinf"), fullsample.attr = NULL, ...)
 }
 \arguments{
 \item{full.data}{passed from \code{peperr}, but not used for calculation of the Brier score.}

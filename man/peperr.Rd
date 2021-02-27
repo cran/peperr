@@ -87,7 +87,7 @@ Concerning parallelisation, there are three possibilities to run \code{peperr}:
 
 In general, if \code{parallel=NULL}, all information concerning the cluster set-up is taken from commandline, else, it can be specified using the three arguments \code{parallel}, \code{clustertype}, \code{nodes}, and, if necessary, \code{clusterhosts}. 
 
-sfCluster is a Unix tool for flexible and comfortable managment of parallel R processes. It is available at \url{www.imbi.uni-freiburg.de/parallel}, together with detailed information. However, \pkg{peperr} is usable with any other cluster solution supported by \pkg{snowfall}, i.e. sfCluster has not to be installed to use package \pkg{peperr}. Note that this may require cluster handling by the user, e.g. manually shut down with 'lamhalt' on commandline for \code{type="MPI"}. But, using a socket cluster (argument \code{parallel=TRUE} and \code{clustertype="SOCK"}), does not require any extra installation. 
+sfCluster is a Unix tool for flexible and comfortable managment of parallel R processes. However, \pkg{peperr} is usable with any other cluster solution supported by \pkg{snowfall}, i.e. sfCluster has not to be installed to use package \pkg{peperr}. Note that this may require cluster handling by the user, e.g. manually shut down with 'lamhalt' on commandline for \code{type="MPI"}. But, using a socket cluster (argument \code{parallel=TRUE} and \code{clustertype="SOCK"}), does not require any extra installation. 
 
 Note that the run time cannot speed up anymore if the number of nodes is chosen higher than the number of passed training/test samples plus one, as parallelisation takes place in the resampling procedure and one additional run is used for computation on the full sample.
 

@@ -5,8 +5,8 @@
 Evaluate the misclassification rate, i.e. prediction error, for a fitted model on new data. To use as argument \code{aggregation.fun} in \code{peperr} call. 
 }
 \usage{
-aggregation.misclass(full.data=NULL, response, x, model, cplx=NULL,  type=c("apparent", "noinf"), 
-   fullsample.attr = NULL, ...)
+aggregation.misclass(full.data=NULL, response, x, model, cplx=NULL,  
+type=c("apparent", "noinf"), fullsample.attr = NULL, ...)
 }
 \arguments{
 \item{full.data}{passed from \code{peperr}, but not used for calculation of the misclassification rate.}

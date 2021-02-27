@@ -45,7 +45,7 @@ plot.peperr <- function(x, y, ...){
             }
          }
    } else {
-   require(locfit)
+   #require(locfit)
    message("Press enter for next graphic")
    if ((all.equal(x.complexity,x$selected.complexity)!=TRUE)[1]){
       if(sum(x$sample.complexity==0)<length(x$sample.complexity)){
