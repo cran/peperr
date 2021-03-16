@@ -1,6 +1,6 @@
-845f49c81864c07460b1f5d74393be48 *ChangeLog
-dd64940311b7807d3ed19256f4aabde8 *DESCRIPTION
+ee271fd9798915efb1de2a30429e93e1 *DESCRIPTION
 09e813b23a47fee3e65cfd4ddbb9bd34 *NAMESPACE
+26b7636aa4de4fcd8d8f2976d2c578d7 *NEWS.md
 ea057c2199e3e682cd20303815ff3b3e *R/PLL.R
 8342cbdaeb61ead51066ccf02640bab0 *R/PLL.coxph.R
 a1b212bd6580c85c2b64c6fcebb4899b *R/aggregation.brier.R
@@ -22,6 +22,7 @@ cf899cf7a5f2ad572f076e0bb71c129c *R/predictProb.survfit.R
 d33b4ed40734c52a78eab7aa05652ab6 *R/print.peperr.R
 776ef7a5ab9889eff25c08aa19f56c4e *R/resample.indices.R
 3e370845c7d159f34cca5fcf71ccc857 *R/summary.peperr.R
+4f027d557b48dd01638a3e12edbc5123 *README.md
 84fe32ae0252a2b86a820537da0385ea *man/PLL.Rd
 fed84a8d3c28dc12a698355237ed0a32 *man/PLL.coxph.Rd
 15d28a47896dc7f512bcf9011266d62a *man/aggregation.brier.Rd
@@ -29,10 +30,12 @@ fed84a8d3c28dc12a698355237ed0a32 *man/PLL.coxph.Rd
 d19e20553995de340ce8bad35d6f9631 *man/aggregation.pmpec.Rd
 e88104313a6aa1a859664d34a6eec61a *man/complexity.LASSO.Rd
 8c7808bc84d6f0188568149904f889eb *man/extract.fun.Rd
+9c9fd4cd3db38e051aa30b00ac62d35e *man/figures/README-pressure-1.png
+c5590e6e98dd91d2d7b5af314a33e3af *man/figures/logo.png
 cac5ad9366f346ccac35190f49a779c3 *man/fit.LASSO.Rd
 aaaf915cfcdecd5ad5ecd0713f144525 *man/fit.coxph.Rd
 5da56f06d6a8fceafe8e210e2ae13aeb *man/ipec.Rd
-3cf17afe709c7956697a9d751c25d9ed *man/peperr.Rd
+bae4f04a72a011849b9e8f2d73802307 *man/peperr.Rd
 e6d2e0e12105299d40eecee7e7dc7c7e *man/perr.Rd
 6ff7f46c4b94e05e68b5c9baf72977bf *man/plot.peperr.Rd
 bdad5093e93be9644d488111f886a940 *man/pmpec.Rd
