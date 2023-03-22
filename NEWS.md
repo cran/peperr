@@ -1,3 +1,7 @@
+# peperr 1.5
+
+* Code update to fix CRAN issues.
+
 # peperr 1.4
 
 * Code update.

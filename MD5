@@ -1,13 +1,13 @@
-433728596b8c8581830a400325f520ee *DESCRIPTION
-39f29d3d48579890af785fec68ee856e *NAMESPACE
-6d5be1a2ed5fca8f3f92ffc6cdaa14d8 *NEWS.md
+10fbebf217195a170ac80d444c005f22 *DESCRIPTION
+2492ca8484ce2fce041c1d4380d682e1 *NAMESPACE
+1c8f38547385b599b73c6208da2be825 *NEWS.md
 ea057c2199e3e682cd20303815ff3b3e *R/PLL.R
 8342cbdaeb61ead51066ccf02640bab0 *R/PLL.coxph.R
 a1b212bd6580c85c2b64c6fcebb4899b *R/aggregation.brier.R
 9f14d3af51a88d52811e8a9533642f2c *R/aggregation.misclass.R
 5a1c768364cfa9fb01a408ce73e4cd88 *R/aggregation.pmpec.R
 632bee13481c19c0257c36bd04bebb45 *R/complexity.LASSO.R
-0ab0fe1b91c480dcd768273caa1835d8 *R/extract.R
+ad0edbc8e6e7548340da6add85d26d8b *R/extract.R
 c400fa172319ad7cd2430e5d0253c358 *R/extract.fun.R
 f66fd11865a1ed75952e63ae1d572467 *R/fit.LASSO.R
 c681192ff6d947289f47362a628d3092 *R/fit.coxph.R
@@ -15,7 +15,7 @@ c681192ff6d947289f47362a628d3092 *R/fit.coxph.R
 d44a525d3b422b5cf7a46ae2442dd3ea *R/peperr.R
 c45ecd88febd9bad98062b46d161e453 *R/perr.R
 4ba566b35d612a3c1f5f5539f2b57ce9 *R/plot.peperr.R
-012020c6795bd67b1d25b7e5517c0ad5 *R/pmpec.R
+f7d6bbdff1f4ef64f4660b59772747c7 *R/pmpec.R
 607b7382206d9a2451bb3bc906a4decd *R/predictProb.R
 b6b1c87cc4261edaac9958c1e30f645e *R/predictProb.coxph.R
 cf899cf7a5f2ad572f076e0bb71c129c *R/predictProb.survfit.R
